@@ -1,23 +1,33 @@
 <mat-toolbar>
   <mat-toolbar-row>
     <a [routerLink]="['/home']" class="title-link">
-      <h2>{{title}}</h2>
+      <h1>{{title}}</h1>
     </a>
+    <span class="fill-remaining-space"></span>
+    <span class="page-title fill-margin">{{pageTitle}}</span>
+    <mat-icon>{{iconTitle}}</mat-icon>
   </mat-toolbar-row>
   <mat-toolbar-row>
-    <span class="page-title">{{pageTitle}}</span>
+    <button mat-raised-button color="primary" [routerLink]="['/home']" routerLinkActive="router-link-active"
+      class="fill-margin" [ngClass]="{'active' : activeToggle === 'home'}">Home</button>
+    <button mat-raised-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active"
+      class="fill-margin" [ngClass]="{'active' : activeToggle === 'aboutus'}">About Us</button>
+    <button mat-raised-button color="primary" [routerLink]="['/contactus']" routerLinkActive="router-link-active"
+      class="fill-margin" [ngClass]="{'active' : activeToggle === 'contactus'}">Contact Us</button>
+
     <span class="fill-remaining-space"></span>
-    <button mat-stroked-button color="primary" [routerLink]="['/home']"
-      routerLinkActive="router-link-active">Home</button>
-    <button mat-stroked-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active">About
-      Us</button>
-    <button mat-stroked-button color="primary" [routerLink]="['/settings']"
-      routerLinkActive="router-link-active">Settings</button>
-    <button mat-stroked-button color="primary" [routerLink]="['/aboutus']"
-      routerLinkActive="router-link-active">Login</button>
-  </mat-toolbar-row>
-  <mat-toolbar-row>
-    <span class="fill-remaining-space"></span>
-    <button mat-raised-button color="accent"><i class="material-icons">dashboard</i></button>
+    <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
+    <mat-icon matTooltip="Account" [routerLink]="['/login']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
+    <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
+    </mat-icon>
+    <mat-icon matTooltip="Quick help" class="mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}"
+      [matMenuTriggerFor]="helpbox">help</mat-icon>
   </mat-toolbar-row>
 </mat-toolbar>
+
+<mat-menu class="help-section" #helpbox="matMenu">
+  <span class="help-section-text">{{helpText}}</span>
+</mat-menu>

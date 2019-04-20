@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //import { BrowserAnimationsModule,NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
         MatButtonModule,
+        MatButtonToggleModule,
         MatCheckboxModule,
         MatFormFieldModule,
         MatDialogModule,
@@ -42,6 +43,7 @@ import {MatIconRegistry} from '@angular/material';
         ReactiveFormsModule,
         BrowserAnimationsModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatCheckboxModule,
         MatFormFieldModule,
         MatDialogModule,
@@ -73,6 +75,7 @@ import {MatIconRegistry} from '@angular/material';
     exports: [
         BrowserAnimationsModule,
         MatButtonModule,
+        MatButtonToggleModule,
         MatFormFieldModule,
         MatCheckboxModule,
         MatTabsModule,

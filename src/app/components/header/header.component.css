@@ -10,3 +10,21 @@
 .fill-remaining-space {
   flex: 1 1 auto;
 }
+
+.fill-margin {
+  margin: 0 14px 0 0;
+}
+
+.mat-icon-click {
+  cursor: pointer;
+}
+
+.active {
+  box-shadow: none;
+  background-color: #6699CC;
+}
+
+.help-section-text {
+  color: #fff !important;
+  margin: 10px 5px !important;
+}

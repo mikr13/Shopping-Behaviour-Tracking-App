@@ -12,7 +12,6 @@ import { moveIn, fallIn } from 'src/app/shared/router.animation';
 })
 export class AboutusComponent implements OnInit {
   state: string = '';
-  header: string = 'About Us';
 
   constructor() { }
 

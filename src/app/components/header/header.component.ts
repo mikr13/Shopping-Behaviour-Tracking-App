@@ -7,8 +7,11 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent implements OnInit {
-  title: string = 'ShopEasy';
+  title = 'ShopEasy';
   @Input() pageTitle: string;
+  @Input() iconTitle: string;
+  @Input() activeToggle: string;
+  @Input() helpText: string;
 
   constructor() { }
 
