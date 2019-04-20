@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { BackendService } from './../../services/backend.service';
+
 @Component({
 // tslint:disable-next-line: component-selector
   selector: 'footer',
@@ -8,9 +10,12 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  configData;
+
+  constructor(private backendService: BackendService) { }
 
   ngOnInit() {
+    this.configData = this.backendService.getConfig();
   }
 
 }

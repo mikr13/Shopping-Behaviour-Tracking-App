@@ -18,6 +18,8 @@
     <span class="fill-remaining-space"></span>
     <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
+      <mat-icon matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+        class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}" matBadgeColor="warn">shopping_cart</mat-icon>
     <mat-icon matTooltip="Account" [routerLink]="['/login']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
     <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"

@@ -18,3 +18,22 @@ a {
   color: #6699CC;
   text-decoration: none;
 }
+
+mat-icon {
+  margin-left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+}
+
+.footer-span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.footer-span a {
+  padding: 0 5px;
+}

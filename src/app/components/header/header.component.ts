@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { BackendService } from './../../services/backend.service';
+
 @Component({
 // tslint:disable-next-line: component-selector
   selector: 'header',
@@ -12,10 +14,15 @@ export class HeaderComponent implements OnInit {
   @Input() iconTitle: string;
   @Input() activeToggle: string;
   @Input() helpText: string;
+  counter: number;
 
-  constructor() { }
+  constructor(private backendService: BackendService) { }
 
   ngOnInit() {
+    this.counter = 0;
+    this.backendService.getCartTotal().subscribe(res => {
+      this.counter = res;
+    });
   }
 
 }

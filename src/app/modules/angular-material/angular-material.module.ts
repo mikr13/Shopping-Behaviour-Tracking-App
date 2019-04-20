@@ -29,13 +29,12 @@ import {
         MatGridListModule,
         MatExpansionModule,
         MatRadioModule,
-        MatBadgeModule
+        MatBadgeModule,
+        MatIconRegistry
         } from '@angular/material';
-import {BrowserModule} from '@angular/platform-browser';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {DomSanitizer} from '@angular/platform-browser';
-import {MatIconRegistry} from '@angular/material';
+// import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 
 @NgModule({
     imports: [
@@ -107,5 +106,14 @@ import {MatIconRegistry} from '@angular/material';
 })
 
 export class AngularMaterialModule {
-    constructor() {}
+    constructor(private iconRegistry: MatIconRegistry, private sanitizer: DomSanitizer) {
+
+      this.iconRegistry.addSvgIcon(
+        'github', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/github.svg')
+      );
+
+      this.iconRegistry.addSvgIcon(
+        'email', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/email.svg')
+      );
+    }
 }

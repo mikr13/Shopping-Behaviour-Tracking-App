@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { AppRoutingModule } from './modules/app-routing/app-routing.module';
@@ -28,10 +29,11 @@ import { ContactusComponent } from './components/contactus/contactus.component';
     ContactusComponent
   ],
   imports: [
+    HttpClientModule,
     BrowserModule,
     AppRoutingModule,
-    AngularMaterialModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AngularMaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
