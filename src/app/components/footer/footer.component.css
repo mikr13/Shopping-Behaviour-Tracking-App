@@ -1,0 +1,19 @@
+mat-card {
+  border-radius: 0 !important;
+  -webkit-border-radius: 0 !important;
+  -moz-border-radius: 0 !important;
+  -ms-border-radius: 0 !important;
+  -o-border-radius: 0 !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mat-card-context {
+  text-align: center;
+  align-content: center;
+}
+
+a {
+  color: #007a70;
+}

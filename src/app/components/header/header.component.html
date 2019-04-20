@@ -1,0 +1,23 @@
+<mat-toolbar>
+  <mat-toolbar-row>
+    <a [routerLink]="['/home']" class="title-link">
+      <h2>{{title}}</h2>
+    </a>
+  </mat-toolbar-row>
+  <mat-toolbar-row>
+    <span class="page-title">{{pageTitle}}</span>
+    <span class="fill-remaining-space"></span>
+    <button mat-stroked-button color="primary" [routerLink]="['/home']"
+      routerLinkActive="router-link-active">Home</button>
+    <button mat-stroked-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active">About
+      Us</button>
+    <button mat-stroked-button color="primary" [routerLink]="['/settings']"
+      routerLinkActive="router-link-active">Settings</button>
+    <button mat-stroked-button color="primary" [routerLink]="['/aboutus']"
+      routerLinkActive="router-link-active">Login</button>
+  </mat-toolbar-row>
+  <mat-toolbar-row>
+    <span class="fill-remaining-space"></span>
+    <button mat-raised-button color="accent"><i class="material-icons">dashboard</i></button>
+  </mat-toolbar-row>
+</mat-toolbar>
