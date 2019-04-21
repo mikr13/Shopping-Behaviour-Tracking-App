@@ -28,3 +28,17 @@
   color: #fff !important;
   margin: 10px 5px !important;
 }
+
+.responsive-display {
+  display: none;
+}
+
+@media screen and (max-width: 480px) {
+  .responsive {
+    display: none;
+  }
+
+  .responsive-display {
+    display: inline-block;
+  }
+}

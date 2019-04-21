@@ -10,18 +10,29 @@ export class BackendService {
 
   constructor() { }
 
-  getConfig () {
+  getConfig() {
     return environment.social;
   }
 
-  getCartTotal () {
-    let fake = "2";
+  getCartTotal() {
+    const fake = '2';
     return Observable.create(
       observer => {
         setTimeout(() => {
           observer.next(fake);
-        }, 2000)
+        }, 2000);
       }
-    )
+    );
+  }
+
+  getUserStatus() {
+    const fake = 'true';
+    return Observable.create(
+      observer => {
+        setTimeout(() => {
+          observer.next(fake);
+        }, 5000);
+      }
+    );
   }
 }

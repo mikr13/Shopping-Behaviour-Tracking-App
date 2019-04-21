@@ -15,13 +15,23 @@ export class HeaderComponent implements OnInit {
   @Input() activeToggle: string;
   @Input() helpText: string;
   counter: number;
+  userStatusColor: string;
+  userStatus: string;
 
   constructor(private backendService: BackendService) { }
 
   ngOnInit() {
     this.counter = 0;
-    this.backendService.getCartTotal().subscribe(res => {
+    this.userStatusColor = 'accent';
+    this.userStatus = 'Login/Signup';
+
+    this.backendService.getCartTotal().subscribe((res: number) => {
       this.counter = res;
+    });
+
+    this.backendService.getUserStatus().subscribe((res: boolean) => {
+      this.userStatusColor = res ? 'primary' : 'accent';
+      this.userStatus = res ? 'Your account section' : 'Login/Signup';
     });
   }
 

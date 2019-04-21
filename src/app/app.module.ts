@@ -14,7 +14,6 @@ import { HomeComponent } from './components/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingComponent } from './components/setting/setting.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ContactusComponent } from './components/contactus/contactus.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +24,7 @@ import { ContactusComponent } from './components/contactus/contactus.component';
     AboutusComponent,
     HomeComponent,
     SettingComponent,
-    DashboardComponent,
-    ContactusComponent
+    DashboardComponent
   ],
   imports: [
     HttpClientModule,

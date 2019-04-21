@@ -11,24 +11,59 @@
     <button mat-raised-button color="primary" [routerLink]="['/home']" routerLinkActive="router-link-active"
       class="fill-margin" [ngClass]="{'active' : activeToggle === 'home'}">Home</button>
     <button mat-raised-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active"
-      class="fill-margin" [ngClass]="{'active' : activeToggle === 'aboutus'}">About Us</button>
-    <button mat-raised-button color="primary" [routerLink]="['/contactus']" routerLinkActive="router-link-active"
-      class="fill-margin" [ngClass]="{'active' : activeToggle === 'contactus'}">Contact Us</button>
+      class="fill-margin" [ngClass]="{'active' : activeToggle === 'generalinfo'}">General Info</button>
 
     <span class="fill-remaining-space"></span>
+
+    <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
+
+    <mat-icon matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
+      matBadgeColor="warn">shopping_cart</mat-icon>
+
+    <mat-icon matTooltip="{{userStatus}}" [color]="userStatusColor" [routerLink]="['/login']"
+      routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
+      [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
+
+    <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
+    </mat-icon>
+
+    <mat-icon matTooltip="Quick help" class="mat-icon-click" [matMenuTriggerFor]="helpbox">help</mat-icon>
+
+    <button mat-icon-button class="responsive-display" [matMenuTriggerFor]="hiddenMenu">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<mat-menu #hiddenMenu="matMenu">
+  <button mat-menu-item>
     <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
-      <mat-icon matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
-        class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}" matBadgeColor="warn">shopping_cart</mat-icon>
-    <mat-icon matTooltip="Account" [routerLink]="['/login']" routerLinkActive="router-link-active"
-      class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
+    <span>Dashboard</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+      class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
+      matBadgeColor="warn">shopping_cart</mat-icon>
+      <span>Your Cart</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon matTooltip="{{userStatus}}" [color]="userStatusColor" [routerLink]="['/login']"
+      routerLinkActive="router-link-active" class="fill-margin mat-icon-click"
+      [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
+      <span>{{userStatus}}</span>
+  </button>
+  <button mat-menu-item>
     <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
     </mat-icon>
-    <mat-icon matTooltip="Quick help" class="mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}"
-      [matMenuTriggerFor]="helpbox">help</mat-icon>
-  </mat-toolbar-row>
-</mat-toolbar>
+    <span>Settings</span>
+  </button>
+</mat-menu>
+
 
 <mat-menu class="help-section" #helpbox="matMenu">
   <span class="help-section-text">{{helpText}}</span>

@@ -1,3 +1,51 @@
-<header pageTitle="About Us" iconTitle="info" activeToggle="aboutus" helpText="This is About Page quick help section"></header>
+<div class="main-content">
+  <header pageTitle="General Information" iconTitle="info" activeToggle="generalinfo"
+    helpText="This is General Info quick help section"></header>
 
-This works Smooth
+  <main>
+    <div [@moveIn]='state'>
+      <div>
+        <mat-tab-group mat-align-tabs="center" color="primary" backgroundColor="accent">
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>info</mat-icon> &nbsp; About Us
+            </ng-template>
+            <div class="content">
+              <h2>Who are we?</h2>
+              <p>...</p>
+            </div>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>question_answer</mat-icon> &nbsp; FAQ
+            </ng-template>
+            <div class="content">
+              <h2>Some general questions asked.</h2>
+              <p>...</p>
+            </div>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>assignment_late</mat-icon> &nbsp; Terms & Conditions
+            </ng-template>
+            <div class="content">
+              <h2>Terms and conditions you are agreeing on while using this website.</h2>
+              <p>...</p>
+            </div>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>assignment_late</mat-icon> &nbsp; Contact Us
+            </ng-template>
+            <div class="content">
+              <h2>Get in touch with us through this.</h2>
+              <p>...</p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+  </main>
+
+  <footer></footer>
+</div>
