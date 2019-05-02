@@ -8,6 +8,37 @@
   min-height: 100vh;
 }
 
+.content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.product-card img {
+  /* max-width: 400px; */
+  max-height: 303.45px;
+}
+
+.product-card {
+  flex: 0 1 calc(30% - 1em);
+  margin: 0 0 10px 0;
+}
+
+.product-header-image {
+  background-size: cover;
+}
+
 footer {
   margin: auto 0 0 0;
+}
+
+@media screen and (max-width: 650px) {
+
+  .content {
+    display: block;
+  }
+
+  .product-card {
+    margin: 10px 0;
+  }
 }

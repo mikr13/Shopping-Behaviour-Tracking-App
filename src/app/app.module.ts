@@ -14,6 +14,7 @@ import { HomeComponent } from './components/home/home.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SettingComponent } from './components/setting/setting.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { SetproductComponent } from './components/admin/setproduct/setproduct.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     AboutusComponent,
     HomeComponent,
     SettingComponent,
-    DashboardComponent
+    DashboardComponent,
+    SetproductComponent
   ],
   imports: [
     HttpClientModule,
