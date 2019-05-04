@@ -22,6 +22,9 @@ form {
 
 mat-form-field {
   width: 50%;
+}
+
+input {
   padding: 5px 10px;
 }
 
@@ -52,11 +55,19 @@ mat-card-actions {
 }
 
 .ng-valid[required], .ng-valid.required  {
-  border-left: 5px solid #42A948; /* green */
+  border-left: 5px solid #42A948;
 }
 
-.ng-invalid:not(form)  {
-  border-left: 5px solid #a94442; /* red */
+.ng-invalid:not(form):not(input):not(textarea)  {
+  border-left: 3px solid #a94442;
+}
+
+table {
+  width: 100%;
+}
+
+td, th {
+  width: auto;
 }
 
 footer {
