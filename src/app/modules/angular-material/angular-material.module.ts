@@ -1,7 +1,22 @@
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-//import { BrowserAnimationsModule,NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { A11yModule } from '@angular/cdk/a11y';
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { PortalModule } from '@angular/cdk/portal';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { CdkStepperModule } from '@angular/cdk/stepper';
+import { CdkTableModule } from '@angular/cdk/table';
+import { CdkTreeModule } from '@angular/cdk/tree';
+// import { BrowserAnimationsModule,NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
+        MatAutocompleteModule,
+        MatBottomSheetModule,
+        MatDividerModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatTreeModule,
         MatButtonModule,
         MatButtonToggleModule,
         MatCheckboxModule,
@@ -32,12 +47,20 @@ import {
         MatBadgeModule,
         MatIconRegistry
         } from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 // import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
     imports: [
+        MatAutocompleteModule,
+        MatBottomSheetModule,
+        MatDividerModule,
+        MatRippleModule,
+        MatSidenavModule,
+        MatSliderModule,
+        MatSlideToggleModule,
+        MatTreeModule,
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
@@ -69,39 +92,64 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
         MatBadgeModule,
         MatExpansionModule,
         MatRadioModule,
-        MatBadgeModule
+        MatBadgeModule,
+        A11yModule,
+        DragDropModule,
+        PortalModule,
+        ScrollingModule,
+        CdkStepperModule,
+        CdkTableModule,
+        CdkTreeModule
         ],
     exports: [
-        BrowserAnimationsModule,
-        MatButtonModule,
-        MatButtonToggleModule,
-        MatFormFieldModule,
-        MatCheckboxModule,
-        MatTabsModule,
-        MatProgressSpinnerModule,
-        MatMenuModule,
-        MatIconModule,
-        MatInputModule,
-        MatSelectModule,
-        MatToolbarModule,
-        MatCardModule,
-        MatChipsModule,
-        MatListModule,
-        MatTooltipModule,
-        MatNativeDateModule,
-        MatDatepickerModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatProgressBarModule,
-        MatSortModule,
-        MatSnackBarModule,
-        MatStepperModule,
-        MatGridListModule,
-        MatBadgeModule,
-        MatExpansionModule,
-        MatRadioModule,
-        MatBadgeModule
-        ],
+      MatAutocompleteModule,
+      MatBottomSheetModule,
+      MatDividerModule,
+      MatRippleModule,
+      MatSidenavModule,
+      MatSliderModule,
+      MatSlideToggleModule,
+      MatTreeModule,
+      FormsModule,
+      ReactiveFormsModule,
+      BrowserAnimationsModule,
+      MatButtonModule,
+      MatButtonToggleModule,
+      MatCheckboxModule,
+      MatFormFieldModule,
+      MatDialogModule,
+      MatTabsModule,
+      MatProgressSpinnerModule,
+      MatMenuModule,
+      MatIconModule,
+      MatInputModule,
+      MatSelectModule,
+      MatToolbarModule,
+      MatCardModule,
+      MatChipsModule,
+      MatListModule,
+      MatTooltipModule,
+      MatNativeDateModule,
+      MatDatepickerModule,
+      MatTableModule,
+      MatPaginatorModule,
+      MatProgressBarModule,
+      MatSortModule,
+      MatSnackBarModule,
+      MatStepperModule,
+      MatGridListModule,
+      MatBadgeModule,
+      MatExpansionModule,
+      MatRadioModule,
+      MatBadgeModule,
+      A11yModule,
+      DragDropModule,
+      PortalModule,
+      ScrollingModule,
+      CdkStepperModule,
+      CdkTableModule,
+      CdkTreeModule
+      ],
     declarations: []
 })
 

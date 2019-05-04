@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { AppRoutingModule } from './modules/app-routing/app-routing.module';
@@ -31,6 +32,8 @@ import { SetproductComponent } from './components/admin/setproduct/setproduct.co
   imports: [
     HttpClientModule,
     BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AngularMaterialModule

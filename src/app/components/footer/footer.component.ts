@@ -10,7 +10,7 @@ import { BackendService } from './../../services/backend.service';
 })
 export class FooterComponent implements OnInit {
 
-  configData;
+  configData: any;
 
   constructor(private backendService: BackendService) { }
 
