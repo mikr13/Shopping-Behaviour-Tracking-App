@@ -13,7 +13,7 @@ export class BackendService {
 
   constructor() {
     // Create 500 member
-    this.member = Array.from({length: 20}, (_, k) => this.createNewmember(k + 1));
+    this.member = Array.from({length: 500}, (_, k) => this.createNewmember(k + 1));
   }
 
   getConfig = () => {
@@ -22,8 +22,7 @@ export class BackendService {
 
   getCartTotal = () => {
     const fake = '2';
-    return Observable.create(
-      observer => {
+    return Observable.create(observer => {
         setTimeout(() => {
           observer.next(fake);
         }, 2000);
@@ -32,20 +31,19 @@ export class BackendService {
   }
 
   getUserStatus = () => {
-    const fake = 'true';
-    return Observable.create(
-      observer => {
+    const role = ['user', 'admin'];
+    const fake = [true, role[Math.floor(Math.random() * role.length)]];
+    return Observable.create(observer => {
         setTimeout(() => {
           observer.next(fake);
-        }, 5000);
+        }, 2000);
       }
     );
   }
 
   getProducts = (type: string, data?: any) => {
     if (type === 'products') {
-      return Observable.create(
-        observer => {
+      return Observable.create(observer => {
           setTimeout(() => {
             observer.next(this.member);
             observer.complete();
@@ -58,28 +56,76 @@ export class BackendService {
           return el;
         }
       });
-      return Observable.create(
-        observer => {
+      return Observable.create(observer => {
           setTimeout(() => {
             observer.next(result);
             observer.complete();
           }, 2000);
         }
-      )
+      );
+    } else if (type === 'id') {
+      const result = this.member.filter(el => {
+        if (el.id === data) {
+          return el;
+        }
+      });
+      return Observable.create(observer => {
+          setTimeout(() => {
+            observer.next(result);
+            observer.complete();
+          }, 2000);
+        }
+      );
     }
   }
 
   saveNewProduct = (data: any) => {
     data.id = this.member.length + 1;
     this.member.push(data);
-    return Observable.create(
-      observer => {
+    return Observable.create(observer => {
         setTimeout(() => {
           observer.next(this.member);
           observer.complete();
         }, 5000);
       }
-    )
+    );
+  }
+
+  updateProduct = (data: Product) => {
+    if (this.member.includes(data)) {
+      return Observable.create(observer => {
+          setTimeout(() => {
+            observer.next(this.member);
+            observer.complete();
+          }, 2000);
+        }
+      );
+    } else {
+      for (let i = 0; i < this.member.length; i++) {
+        if (this.member[i].id === data.id) {
+          this.member[i] = data;
+          break;
+        }
+      }
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(this.member);
+          observer.complete();
+        }, 5000);
+        }
+      );
+    }
+  }
+
+  deleteProduct = (id: Product['id']) => {
+    this.member = this.member.filter(el => !(el.id === id));
+    return Observable.create(observer => {
+      setTimeout(() => {
+        observer.next(this.member);
+        observer.complete();
+      }, 2000);
+      }
+    );
   }
 
   randomString = (length: number) => {
@@ -113,14 +159,14 @@ export class BackendService {
         ret.push(removed[0]);
       }
       return ret;
-    }
+    };
 
     const data: Product = {
       id: id.toString(),
       category: category[Math.floor((Math.random() * category.length))],
       subcategory: 'T-Shirt',
       product: product[Math.floor((Math.random() * product.length))],
-      tags: getUnique(Math.floor((Math.random() * tags.length) + 1)),
+      tags: getUnique(Math.floor((Math.random() * tags.length) / 2 + 1)),
       description: this.randomString(Math.floor((Math.random() * 500) + 1)),
       price: Math.floor((Math.random() * 10000) + 1),
       maxdiscount: Math.floor((Math.random() * 40) + 1),

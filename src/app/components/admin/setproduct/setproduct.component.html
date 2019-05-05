@@ -1,424 +1,404 @@
-<div class="main-content">
-  <header pageTitle="Product Manage" iconTitle="library_add" activeToggle=""
-    helpText="This is Product Add/Edit/Delete page quick help section"></header>
-
-  <main>
-    <div [@moveIn]='state'>
-      <div class="content">
-        <mat-card>
-          <div
-            *ngIf="(toggleField === 'searchMode') else (toggleField === 'addMode') ? showAddMode : ((toggleField === 'editMode') ? showEditMode : showResultMode)">
-            <mat-card-header>
-              <span matTooltip="Add new">
-                <button mat-fab color="primary" (click)="toggle('addMode');">
-                  <mat-icon>add</mat-icon>
-                </button>
-              </span>
-              <span class="fill-margin"></span>
-              <span matTooltip="Shoe recent results">
-                <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
-                  <mat-icon>cached</mat-icon>
-                </button>
-              </span>
-            </mat-card-header>
-            <mat-card-content>
-              <!-- Search page here -->
-              <div class="title">
-                <h3>Search Product:</h3>
-              </div>
-              <form (ngSubmit)="toggle('resultMode');onSearchSubmit(searchForm.value)" #searchForm="ngForm">
-                <mat-form-field hintLabel="Category name | Max 50 characters">
-                  <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="productData.category"
-                    #category="ngModel" placeholder="Enter the category name" name="category" required>
-                  <mat-hint align="end">{{productData.category?.length || 0}}/50</mat-hint>
-                  <!-- using two way data binding to get length above -->
-                </mat-form-field>
-                <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
-                  Category name is required
-                </div>
-                <br><br>
-                <mat-form-field hintLabel="Product name | Max 50 characters">
-                  <input matInput #input type="text" minlength="5" maxlength="50" [(ngModel)]="productData.product"
-                    #product="ngModel" placeholder="Enter the product name" name="product" required>
-                  <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
-                  <!-- using local reference to get length above -->
-                </mat-form-field>
-                <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
-                  Product name is required
-                </div>
-                <br><br>
-                <mat-form-field hintLabel="From date">
-                  <input matInput [matDatepicker]="pickerfromdate" placeholder="Pick from date"
-                    [(ngModel)]="productData.fromDate" #fromDate="ngModel" name="fromDate" required>
-                  <mat-datepicker-toggle matSuffix [for]="pickerfromdate"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerfromdate disabled="false"></mat-datepicker>
-                </mat-form-field>
-                <div [hidden]="fromDate.valid || fromDate.pristine" class="alert alert-danger">
-                  From date is required
-                </div>
-                <br><br>
-                <mat-form-field hintLabel="To date">
-                  <input matInput [matDatepicker]="pickertodate" placeholder="Pick to date"
-                    [(ngModel)]="productData.toDate" #toDate="ngModel" name="toDate" required>
-                  <mat-datepicker-toggle matSuffix [for]="pickertodate"></mat-datepicker-toggle>
-                  <mat-datepicker #pickertodate disabled="false"></mat-datepicker>
-                </mat-form-field>
-                <div [hidden]="toDate.valid || toDate.pristine" class="alert alert-danger">
-                  To date is required
-                </div>
-                <br><br>
-                <mat-card-actions>
-                  <button type="submit" mat-raised-button color="primary"
-                    [disabled]="!searchForm.form.valid">Submit</button>
-                  <button type="reset" mat-raised-button color="accent">Reset</button>
-                </mat-card-actions>
-              </form>
-            </mat-card-content>
+<div class="content">
+  <mat-card>
+    <div
+      *ngIf="(toggleField === 'searchMode') else (toggleField === 'addMode') ? showAddMode : ((toggleField === 'editMode') ? showEditMode : showResultMode)">
+      <mat-card-header>
+        <span matTooltip="Add new">
+          <button mat-fab color="primary" (click)="toggle('addMode');">
+            <mat-icon>add</mat-icon>
+          </button>
+        </span>
+        <span class="fill-margin"></span>
+        <span matTooltip="Shoe recent results">
+          <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
+            <mat-icon>cached</mat-icon>
+          </button>
+        </span>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Search page here -->
+        <div class="title">
+          <h3>Search Product:</h3>
+        </div>
+        <form (ngSubmit)="toggle('resultMode');onSearchSubmit(searchForm.value)" #searchForm="ngForm">
+          <mat-form-field hintLabel="Category name | Max 50 characters">
+            <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="productData.category"
+              #category="ngModel" placeholder="Enter the category name" name="category" required>
+            <mat-hint align="end">{{productData.category?.length || 0}}/50</mat-hint>
+            <!-- using two way data binding to get length above -->
+          </mat-form-field>
+          <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
+            Category name is required
           </div>
-        </mat-card>
-
-        <ng-template #showAddMode>
-          <mat-card-header>
-            <span matTooltip="Search product">
-              <button mat-fab color="primary" (click)="toggle('searchMode');">
-                <mat-icon>search</mat-icon>
-              </button>
-            </span>
-            <span class="fill-margin"></span>
-            <span matTooltip="Shoe recent results">
-              <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
-                <mat-icon>cached</mat-icon>
-              </button>
-            </span>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="title">
-              <h3>Add New Product:</h3>
-            </div>
-            <form (ngSubmit)="onAddSubmit(addForm.value);toggle('resultMode');this.addForm.reset()" #addForm="ngForm">
-              <mat-form-field hintLabel="Category name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.category"
-                  #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required>
-                <mat-hint align="end">{{newProductData.category?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
-                Category name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Sub Category name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.subcategory"
-                  #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory"
-                  required>
-                <mat-hint align="end">{{newProductData.subcategory?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="subcategory.valid || subcategory.pristine" class="alert alert-danger">
-                Sub Category name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.product"
-                  #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product"
-                  required>
-                <mat-hint align="end">{{newProductData.product?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
-                Product name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Tag names">
-                <mat-chip-list #chipList>
-                  <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable"
-                    (removed)="remove(tag)">
-                    {{tag}}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                  </mat-chip>
-                  <input placeholder="New tags..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
-                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
-                </mat-chip-list>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                  <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-                    {{tag}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-              <br><br>
-              <mat-form-field hintLabel="Description is required | Max 2000 characters">
-                <textarea #textarea1 matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
-                  cdkAutosizeMaxRows="7" [(ngModel)]="newProductData.description" #description="ngModel"
-                  placeholder="Enter the product description (Like: Cotton made, wash in cold water, usual fit, etc.)"
-                  name="description" required></textarea>
-                <mat-hint align="end">{{textarea1.value?.length || 0}}/2000</mat-hint>
-              </mat-form-field>
-              <br><br>
-              <mat-form-field hintLabel="Product price">
-                <input matInput type="number" [(ngModel)]="newProductData.price" min="0" #price="ngModel"
-                  placeholder="Enter the product price (Like: '4000 in Indian Rupees')" name="price" pattern="[0-9]+"
-                  required>
-                <mat-hint align="end">{{newProductData.price || 0}} &#8377;</mat-hint>
-              </mat-form-field>
-              <div [hidden]="price.valid || price.pristine" class="alert alert-danger">
-                Product Price is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product maximum discount">
-                <input matInput type="number" [(ngModel)]="newProductData.maxdiscount" min="0" max="40"
-                  #maxdiscount="ngModel" placeholder="Enter the product max discount (Like: '20%')" name="maxdiscount"
-                  pattern="[0-9]+" required>
-                <mat-hint align="end">{{newProductData.maxdiscount || 0}} %</mat-hint>
-              </mat-form-field>
-              <div [hidden]="maxdiscount.valid || maxdiscount.pristine" class="alert alert-danger">
-                Product max discount is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product extra taxes">
-                <input matInput type="number" [(ngModel)]="newProductData.extrataxes" min="0" max="40"
-                  #extrataxes="ngModel" placeholder="Enter the product extra taxes (Like: GST %, combined percentage)"
-                  name="extrataxes" required>
-                <mat-hint align="end">{{newProductData.extrataxes || 0}} %</mat-hint>
-              </mat-form-field>
-              <div [hidden]="extrataxes.valid || extrataxes.pristine" class="alert alert-danger">
-                Product extra taxes is required
-              </div>
-              <br><br>
-              <div class="addform-actions">
-                <div>
-                  <button type="submit" mat-raised-button color="primary"
-                    [disabled]="!addForm.form.valid">Submit</button>
-                </div>
-                <div>
-                  <button type="reset" mat-raised-button color="accent">Reset</button>
-                </div>
-              </div>
-            </form>
-          </mat-card-content>
-        </ng-template>
-
-        <ng-template #showEditMode>
-          <mat-card-header>
-            <span matTooltip="Search product">
-              <button mat-fab color="primary" (click)="toggle('searchMode');">
-                <mat-icon>search</mat-icon>
-              </button>
-            </span>
-            <span class="fill-margin"></span>
-            <span matTooltip="Shoe recent results">
-              <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
-                <mat-icon>cached</mat-icon>
-              </button>
-            </span>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="title">
-              <h3>Update existing Product:</h3>
-            </div>
-            <form (ngSubmit)="onUpdateSubmit(updateForm.value);toggle('searchMode');this.updateForm.reset()"
-              #updateForm="ngForm">
-              <input type="hidden" name="id" [(ngModel)]="updateData.id" #id="ngModel">
-              <mat-form-field hintLabel="Category name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateData.category"
-                  #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required>
-                <mat-hint align="end">{{updateData.category?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
-                Category name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Sub Category name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateData.subcategory"
-                  #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory"
-                  required>
-                <mat-hint align="end">{{updateData.subcategory?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="subcategory.valid || subcategory.pristine" class="alert alert-danger">
-                Sub Category name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product name | Max 50 characters">
-                <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateData.product"
-                  #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product"
-                  required>
-                <mat-hint align="end">{{updateData.product?.length || 0}}/50</mat-hint>
-              </mat-form-field>
-              <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
-                Product name is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Tag names">
-                <mat-chip-list #chipList>
-                  <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable"
-                    (removed)="remove(tag)">
-                    {{tag}}
-                    <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
-                  </mat-chip>
-                  <input placeholder="New tags..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
-                    [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
-                </mat-chip-list>
-                <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
-                  <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
-                    {{tag}}
-                  </mat-option>
-                </mat-autocomplete>
-              </mat-form-field>
-              <br><br>
-              <mat-form-field hintLabel="Description is required | Max 2000 characters">
-                <textarea #textarea1 matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
-                  cdkAutosizeMaxRows="7" [(ngModel)]="updateData.description" #description="ngModel"
-                  placeholder="Enter the product description (Like: Cotton made, wash in cold water, usual fit, etc.)"
-                  name="description" required></textarea>
-                <mat-hint align="end">{{textarea1.value?.length || 0}}/2000</mat-hint>
-              </mat-form-field>
-              <br><br>
-              <mat-form-field hintLabel="Product price">
-                <input matInput type="number" [(ngModel)]="updateData.price" min="0" #price="ngModel"
-                  placeholder="Enter the product price (Like: '4000 in Indian Rupees')" name="price" pattern="[0-9]+"
-                  required>
-                <mat-hint align="end">{{updateData.price || 0}} &#8377;</mat-hint>
-              </mat-form-field>
-              <div [hidden]="price.valid || price.pristine" class="alert alert-danger">
-                Product Price is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product maximum discount">
-                <input matInput type="number" [(ngModel)]="updateData.maxdiscount" min="0" max="40"
-                  #maxdiscount="ngModel" placeholder="Enter the product max discount (Like: '20%')" name="maxdiscount"
-                  pattern="[0-9]+" required>
-                <mat-hint align="end">{{updateData.maxdiscount || 0}} %</mat-hint>
-              </mat-form-field>
-              <div [hidden]="maxdiscount.valid || maxdiscount.pristine" class="alert alert-danger">
-                Product max discount is required
-              </div>
-              <br><br>
-              <mat-form-field hintLabel="Product extra taxes">
-                <input matInput type="number" [(ngModel)]="updateData.extrataxes" min="0" max="40" #extrataxes="ngModel"
-                  placeholder="Enter the product extra taxes (Like: GST %, combined percentage)" name="extrataxes"
-                  required>
-                <mat-hint align="end">{{updateData.extrataxes || 0}} %</mat-hint>
-              </mat-form-field>
-              <div [hidden]="extrataxes.valid || extrataxes.pristine" class="alert alert-danger">
-                Product extra taxes is required
-              </div>
-              <br><br>
-              <div class="addform-actions">
-                <div>
-                  <button type="submit" mat-raised-button color="primary"
-                    [disabled]="!addForm.form.valid">Submit</button>
-                </div>
-                <div>
-                  <button type="reset" mat-raised-button color="accent">Reset</button>
-                </div>
-              </div>
-            </form>
-          </mat-card-content>
-        </ng-template>
-
-        <ng-template #showResultMode>
-          <mat-card-header>
-            <span matTooltip="Search product">
-              <button mat-fab color="primary" (click)="toggle('searchMode');">
-                <mat-icon>search</mat-icon>
-              </button>
-            </span>
-            <span class="fill-margin"></span>
-            <span matTooltip="Add new">
-              <button mat-fab color="primary" (click)="toggle('addMode');">
-                <mat-icon>add</mat-icon>
-              </button>
-            </span>
-          </mat-card-header>
-          <mat-card-content>
-
-            <mat-form-field id="table-filter">
-              <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
-            </mat-form-field>
-
-            <div class="loader" *ngIf="dataLoading">
-              <mat-progress-bar mode="query" color="warn"></mat-progress-bar>
-            </div>
-            <div class="mat-elevation-z8">
-              <table mat-table [dataSource]="dataSource" matSort>
-                <ng-container matColumnDef="id">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
-                  <td mat-cell *matCellDef="let row"> {{row.id}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="category">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
-                  <td mat-cell *matCellDef="let row"> {{row.category}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="subcategory">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Sub-Category </th>
-                  <td mat-cell *matCellDef="let row"> {{row.subcategory}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="product">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
-                  <td mat-cell *matCellDef="let row"> {{row.product}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="tags">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Tags </th>
-                  <td mat-cell *matCellDef="let row"> {{row.tags}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="price">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
-                  <td mat-cell *matCellDef="let row"> {{row.price}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="maxdiscount">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Max Discount </th>
-                  <td mat-cell *matCellDef="let row"> {{row.maxdiscount}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="extrataxes">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header> Extra Taxes </th>
-                  <td mat-cell *matCellDef="let row"> {{row.extrataxes}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="action">
-                  <th mat-header-cell *matHeaderCellDef> Action </th>
-                  <td mat-cell *matCellDef="let row">
-                    <button mat-icon-button matTooltip="Show Picture" *ngIf="row.path"
-                      (click)="getPic(row.id);this.showHostSelfie=true;">
-                      <mat-icon>photo_camera</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Remove Picture" *ngIf="row.path"
-                      (click)="deleteProductPic(row.id);this.showHostSelfie=false;">
-                      <mat-icon>camera_roll</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Take Picture"
-                      (click)="this.myDocId=row.id;this.takeHostSelfie=true;" *ngIf="!row.path">
-                      <mat-icon>camera_roll</mat-icon>
-                    </button>
-                    <span matTooltip="Edit">
-                      <button mat-icon-button (click)="getDoc(row.id)">
-                        <mat-icon>edit</mat-icon>
-                      </button>
-                    </span>
-                    <span matTooltip="Delete">
-                      <button mat-icon-button (click)="deleteDoc(row.id)">
-                        <mat-icon>delete</mat-icon>
-                      </button>
-                    </span>
-                  </td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;">
-                </tr>
-              </table>
-
-              <mat-paginator pageSize="10" [pageSizeOptions]=paginationOption></mat-paginator>
-            </div>
-
-          </mat-card-content>
-        </ng-template>
-      </div>
+          <br><br>
+          <mat-form-field hintLabel="Product name | Max 50 characters">
+            <input matInput #input type="text" minlength="5" maxlength="50" [(ngModel)]="productData.product"
+              #product="ngModel" placeholder="Enter the product name" name="product" required>
+            <mat-hint align="end">{{input.value?.length || 0}}/50</mat-hint>
+            <!-- using local reference to get length above -->
+          </mat-form-field>
+          <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
+            Product name is required
+          </div>
+          <br><br>
+          <mat-form-field hintLabel="From date">
+            <input matInput [matDatepicker]="pickerfromdate" placeholder="Pick from date"
+              [(ngModel)]="productData.fromDate" #fromDate="ngModel" name="fromDate" required>
+            <mat-datepicker-toggle matSuffix [for]="pickerfromdate"></mat-datepicker-toggle>
+            <mat-datepicker #pickerfromdate disabled="false"></mat-datepicker>
+          </mat-form-field>
+          <div [hidden]="fromDate.valid || fromDate.pristine" class="alert alert-danger">
+            From date is required
+          </div>
+          <br><br>
+          <mat-form-field hintLabel="To date">
+            <input matInput [matDatepicker]="pickertodate" placeholder="Pick to date" [(ngModel)]="productData.toDate"
+              #toDate="ngModel" name="toDate" required>
+            <mat-datepicker-toggle matSuffix [for]="pickertodate"></mat-datepicker-toggle>
+            <mat-datepicker #pickertodate disabled="false"></mat-datepicker>
+          </mat-form-field>
+          <div [hidden]="toDate.valid || toDate.pristine" class="alert alert-danger">
+            To date is required
+          </div>
+          <br><br>
+          <mat-card-actions>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!searchForm.form.valid">Submit</button>
+            <button type="reset" mat-raised-button color="accent">Reset</button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
     </div>
-  </main>
+  </mat-card>
 
-  <footer></footer>
+  <ng-template #showAddMode>
+    <mat-card-header>
+      <span matTooltip="Search product">
+        <button mat-fab color="primary" (click)="toggle('searchMode');">
+          <mat-icon>search</mat-icon>
+        </button>
+      </span>
+      <span class="fill-margin"></span>
+      <span matTooltip="Shoe recent results">
+        <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
+          <mat-icon>cached</mat-icon>
+        </button>
+      </span>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="title">
+        <h3>Add New Product:</h3>
+      </div>
+      <form (ngSubmit)="onAddSubmit(addForm.value);toggle('resultMode');this.addForm.reset()" #addForm="ngForm">
+        <mat-form-field hintLabel="Category name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.category"
+            #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required>
+          <mat-hint align="end">{{newProductData.category?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
+          Category name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Sub Category name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.subcategory"
+            #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory" required>
+          <mat-hint align="end">{{newProductData.subcategory?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="subcategory.valid || subcategory.pristine" class="alert alert-danger">
+          Sub Category name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="newProductData.product"
+            #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product" required>
+          <mat-hint align="end">{{newProductData.product?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
+          Product name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Tag names">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let tag of tags" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(tag)">
+              {{tag}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New tags..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
+              [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+              {{tag}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br><br>
+        <mat-form-field hintLabel="Description is required | Max 2000 characters">
+          <textarea #textarea1 matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="7" [(ngModel)]="newProductData.description" #description="ngModel"
+            placeholder="Enter the product description (Like: Cotton made, wash in cold water, usual fit, etc.)"
+            name="description" required></textarea>
+          <mat-hint align="end">{{textarea1.value?.length || 0}}/2000</mat-hint>
+        </mat-form-field>
+        <br><br>
+        <mat-form-field hintLabel="Product price">
+          <input matInput type="number" [(ngModel)]="newProductData.price" min="0" #price="ngModel"
+            placeholder="Enter the product price (Like: '4000 in Indian Rupees')" name="price" pattern="[0-9]+"
+            required>
+          <mat-hint align="end">{{newProductData.price || 0}} &#8377;</mat-hint>
+        </mat-form-field>
+        <div [hidden]="price.valid || price.pristine" class="alert alert-danger">
+          Product Price is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product maximum discount">
+          <input matInput type="number" [(ngModel)]="newProductData.maxdiscount" min="0" max="40" #maxdiscount="ngModel"
+            placeholder="Enter the product max discount (Like: '20%')" name="maxdiscount" pattern="[0-9]+" required>
+          <mat-hint align="end">{{newProductData.maxdiscount || 0}} %</mat-hint>
+        </mat-form-field>
+        <div [hidden]="maxdiscount.valid || maxdiscount.pristine" class="alert alert-danger">
+          Product max discount is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product extra taxes">
+          <input matInput type="number" [(ngModel)]="newProductData.extrataxes" min="0" max="40" #extrataxes="ngModel"
+            placeholder="Enter the product extra taxes (Like: GST %, combined percentage)" name="extrataxes" required>
+          <mat-hint align="end">{{newProductData.extrataxes || 0}} %</mat-hint>
+        </mat-form-field>
+        <div [hidden]="extrataxes.valid || extrataxes.pristine" class="alert alert-danger">
+          Product extra taxes is required
+        </div>
+        <br><br>
+        <div class="form-actions">
+          <div>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!addForm.form.valid">Submit</button>
+          </div>
+          <div>
+            <button type="reset" mat-raised-button color="accent">Reset</button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </ng-template>
+
+  <ng-template #showEditMode>
+    <mat-card-header>
+      <span matTooltip="Search product">
+        <button mat-fab color="primary" (click)="toggle('searchMode');">
+          <mat-icon>search</mat-icon>
+        </button>
+      </span>
+      <span class="fill-margin"></span>
+      <span matTooltip="Shoe recent results">
+        <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
+          <mat-icon>cached</mat-icon>
+        </button>
+      </span>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="title">
+        <h3>Update existing Product:</h3>
+      </div>
+      <form [ngClass]="{'form-disable': formWait}"
+        (ngSubmit)="onUpdateSubmit(updateForm.value);toggle('resultMode');this.updateForm.reset()" #updateForm="ngForm">
+        <input type="hidden" name="id" [(ngModel)]="updateProductData.id" #id="ngModel">
+        <mat-form-field hintLabel="Category name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.category"
+            #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required>
+          <mat-hint align="end">{{updateProductData.category?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
+          Category name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Sub Category name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.subcategory"
+            #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory" required>
+          <mat-hint align="end">{{updateProductData.subcategory?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="subcategory.valid || subcategory.pristine" class="alert alert-danger">
+          Sub Category name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product name | Max 50 characters">
+          <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.product"
+            #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product" required>
+          <mat-hint align="end">{{updateProductData.product?.length || 0}}/50</mat-hint>
+        </mat-form-field>
+        <div [hidden]="product.valid || product.pristine" class="alert alert-danger">
+          Product name is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Tag names">
+          <mat-chip-list #chipList>
+            <mat-chip *ngFor="let tag of updateProductData.tags" [selectable]="selectable" [removable]="removable"
+              (removed)="remove(tag)">
+              {{tag}}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input placeholder="New tags..." #tagInput [formControl]="tagCtrl" [matAutocomplete]="auto"
+              [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              [matChipInputAddOnBlur]="addOnBlur" (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+              {{tag}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <br><br>
+        <mat-form-field hintLabel="Description is required | Max 2000 characters">
+          <textarea #textarea1 matInput cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="2"
+            cdkAutosizeMaxRows="7" [(ngModel)]="updateProductData.description" #description="ngModel"
+            placeholder="Enter the product description (Like: Cotton made, wash in cold water, usual fit, etc.)"
+            name="description" required></textarea>
+          <mat-hint align="end">{{textarea1.value?.length || 0}}/2000</mat-hint>
+        </mat-form-field>
+        <br><br>
+        <mat-form-field hintLabel="Product price">
+          <input matInput type="number" [(ngModel)]="updateProductData.price" min="0" #price="ngModel"
+            placeholder="Enter the product price (Like: '4000 in Indian Rupees')" name="price" pattern="[0-9]+"
+            required>
+          <mat-hint align="end">{{updateProductData.price || 0}} &#8377;</mat-hint>
+        </mat-form-field>
+        <div [hidden]="price.valid || price.pristine" class="alert alert-danger">
+          Product Price is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product maximum discount">
+          <input matInput type="number" [(ngModel)]="updateProductData.maxdiscount" min="0" max="40"
+            #maxdiscount="ngModel" placeholder="Enter the product max discount (Like: '20%')" name="maxdiscount"
+            pattern="[0-9]+" required>
+          <mat-hint align="end">{{updateProductData.maxdiscount || 0}} %</mat-hint>
+        </mat-form-field>
+        <div [hidden]="maxdiscount.valid || maxdiscount.pristine" class="alert alert-danger">
+          Product max discount is required
+        </div>
+        <br><br>
+        <mat-form-field hintLabel="Product extra taxes">
+          <input matInput type="number" [(ngModel)]="updateProductData.extrataxes" min="0" max="40"
+            #extrataxes="ngModel" placeholder="Enter the product extra taxes (Like: GST %, combined percentage)"
+            name="extrataxes" pattern="[0-9]+" required>
+          <mat-hint align="end">{{updateProductData.extrataxes || 0}} %</mat-hint>
+        </mat-form-field>
+        <div [hidden]="extrataxes.valid || extrataxes.pristine" class="alert alert-danger">
+          Product extra taxes is required
+        </div>
+        <br><br>
+        <div class="form-actions">
+          <div>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!updateForm.form.valid">Submit</button>
+          </div>
+          <div>
+            <button type="reset" mat-raised-button color="accent">Reset</button>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </ng-template>
+
+  <ng-template #showResultMode>
+    <mat-card-header>
+      <span matTooltip="Search product">
+        <button mat-fab color="primary" (click)="toggle('searchMode');">
+          <mat-icon>search</mat-icon>
+        </button>
+      </span>
+      <span class="fill-margin"></span>
+      <span matTooltip="Add new">
+        <button mat-fab color="primary" (click)="toggle('addMode');">
+          <mat-icon>add</mat-icon>
+        </button>
+      </span>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-form-field id="table-filter">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+
+      <div class="loader" *ngIf="dataLoading">
+        <mat-progress-bar mode="query" color="warn"></mat-progress-bar>
+      </div>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.id}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Category </th>
+            <td mat-cell *matCellDef="let row"> {{row.category}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="subcategory">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Sub-Category </th>
+            <td mat-cell *matCellDef="let row"> {{row.subcategory}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product </th>
+            <td mat-cell *matCellDef="let row"> {{row.product}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="tags">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Tags </th>
+            <td mat-cell *matCellDef="let row"> {{row.tags}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Price </th>
+            <td mat-cell *matCellDef="let row"> {{row.price}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="maxdiscount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Max Discount </th>
+            <td mat-cell *matCellDef="let row"> {{row.maxdiscount}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="extrataxes">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Extra Taxes </th>
+            <td mat-cell *matCellDef="let row"> {{row.extrataxes}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-icon-button matTooltip="Show Picture" *ngIf="row.path"
+                (click)="getPic(row.id);this.showHostSelfie=true;">
+                <mat-icon>photo_camera</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Remove Picture" *ngIf="row.path"
+                (click)="deleteProductPic(row.id);this.showHostSelfie=false;">
+                <mat-icon>camera_roll</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Take Picture" (click)="this.myDocId=row.id;this.takeHostSelfie=true;"
+                *ngIf="!row.path">
+                <mat-icon>camera_roll</mat-icon>
+              </button>
+              <span matTooltip="Edit">
+                <button mat-icon-button (click)="getDoc(row.id);toggle('editMode');">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </span>
+              <span matTooltip="Delete">
+                <button mat-icon-button (click)="deleteDoc(row.id);toggle('resultMode');">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+
+        <mat-paginator pageSize="10" [pageSizeOptions]=paginationOption></mat-paginator>
+      </div>
+
+    </mat-card-content>
+  </ng-template>
 </div>

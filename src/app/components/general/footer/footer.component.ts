@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BackendService } from './../../services/backend.service';
+import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
 // tslint:disable-next-line: component-selector

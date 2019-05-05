@@ -10,7 +10,7 @@
   <mat-toolbar-row>
     <button mat-raised-button color="primary" [routerLink]="['/home']" routerLinkActive="router-link-active"
       class="fill-margin" [ngClass]="{'active' : activeToggle === 'home'}">Home</button>
-    <button mat-raised-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active"
+    <button *ngIf="!adminView" mat-raised-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active"
       class="fill-margin" [ngClass]="{'active' : activeToggle === 'generalinfo'}">General Info</button>
 
     <span class="fill-remaining-space"></span>
@@ -18,7 +18,7 @@
     <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
 
-    <mat-icon matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+    <mat-icon *ngIf="!adminView" matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
       matBadgeColor="warn">shopping_cart</mat-icon>
 
@@ -45,7 +45,7 @@
     <span>Dashboard</span>
   </button>
   <button mat-menu-item>
-    <mat-icon matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+    <mat-icon *ngIf="!adminView" matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
       matBadgeColor="warn">shopping_cart</mat-icon>
       <span>Your Cart</span>

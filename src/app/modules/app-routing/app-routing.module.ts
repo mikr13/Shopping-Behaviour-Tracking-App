@@ -3,11 +3,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from '../../components/home/home.component';
-import { AboutusComponent } from '../../components/aboutus/aboutus.component';
-import { SettingComponent } from '../../components/setting/setting.component';
-import { LoginComponent } from './../../components/login/login.component';
-import { DashboardComponent } from './../../components/dashboard/dashboard.component';
+import { HomeComponent } from '../../components/general/home/home.component';
+import { AboutusComponent } from '../../components/general/aboutus/aboutus.component';
+import { SettingComponent } from '../../components/general/setting/setting.component';
+import { LoginComponent } from '../../components/general/login/login.component';
+import { DashboardComponent } from '../../components/general/dashboard/dashboard.component';
 import { SetproductComponent } from './../../components/admin/setproduct/setproduct.component';
 
 const routes: Routes = [
