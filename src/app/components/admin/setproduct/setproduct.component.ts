@@ -1,5 +1,5 @@
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { moveIn, fallIn } from 'src/app/shared/router.animation';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete, MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -8,6 +8,7 @@ import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { Product } from './../../../shared/Product';
+import { BackendService } from 'src/app/services/backend.service';
 
 /** Constants used to fill up our data base. */
 const COLORS: string[] = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
@@ -24,7 +25,7 @@ const NAMES: string[] = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
   // tslint:disable-next-line:use-host-property-decorator
   host: {'@moveIn': ''}
 })
-export class SetproductComponent implements OnInit {
+export class SetproductComponent implements OnInit, OnDestroy {
 
   state = '';
   toggleField: string;
@@ -46,46 +47,39 @@ export class SetproductComponent implements OnInit {
                         'Headphones', 'Wireless-Headphones',
                         'Spectacles', 'Sun-Glasses',
                         'Casual-Shoes', 'Formal-Shoes', 'Loafers'];
-  displayedColumns = ['id', 'category', 'subcategory', 'product', 'tags', 'description', 'price', 'maxdiscount', 'extrataxes', 'action'];
   dataSource: MatTableDataSource<Product>;
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
   @ViewChild('autosize') autosize: CdkTextareaAutosize;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+  displayedColumns = ['id', 'category', 'subcategory', 'product', 'tags', 'price', 'maxdiscount', 'extrataxes', 'action'];
   snakbarInterval = 5000;
-  dummy: Array<Product>;
+  members: Array<Product>;
+  member: any;
   paginationOption: Array<number>;
+  dataLoading: boolean;
+  private querySubscription: any;
+  error: boolean;
+  errMsg: any;
 
-  constructor(private snackBar: MatSnackBar) {
+  constructor(private snackBar: MatSnackBar, private backendService: BackendService) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
-    // Create 100 dummy
-    this.dummy = Array.from({length: 50}, (_, k) => this.createNewDummy(k + 1));
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(this.dummy);
-
-    if(this.dummy.length > 50) {
-      this.paginationOption = [5, 10, 25, 50, 100];
-    } else if (this.dummy.length <= 50 && this.dummy.length > 25) {
-      this.paginationOption = [5, 10, 25, 50];
-    } else if (this.dummy.length <= 25 && this.dummy.length > 10) {
-      this.paginationOption = [5, 10, 25];
-    } else if (this.dummy.length <= 10 && this.dummy.length > 5) {
-      this.paginationOption = [5, 10];
-    } else {
-      this.paginationOption = [5];
-    }
   }
 
   ngOnInit() {
     this.toggleField = 'searchMode';
     this.newProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
+    // Assign the data to the data source for the table to render
+    this.dataSource = new MatTableDataSource(this.members);
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
+    this.dataLoading = false;
   }
 
+  // SECTION mat-chip functions start
   add(event: MatChipInputEvent): void {
     // Add fruit only when MatAutocomplete is not open
     // To make sure this does not conflict with OptionSelected Event
@@ -126,6 +120,7 @@ export class SetproductComponent implements OnInit {
 
     return this.allTags.filter(tag => tag.toLowerCase().indexOf(filterValue) === 0);
   }
+  // !SECTION  mat-chip functions end
 
   toggle = (filter?: any) => {
     if (!filter) {
@@ -137,23 +132,83 @@ export class SetproductComponent implements OnInit {
   }
 
   onSearchSubmit = (data?: any) => {
-    console.log(data);
+    this.dataLoading = true;
+    this.querySubscription = this.backendService.getProducts('product', data)
+      .subscribe((result: any) => {
+        if (Array.isArray(result)) {
+          this.member = result;
+          if (this.member.length > 50) {
+            this.paginationOption = [5, 10, 25, 50, 100];
+          } else if (this.member.length <= 50 && this.member.length > 25) {
+            this.paginationOption = [5, 10, 25, 50];
+          } else if (this.member.length <= 25 && this.member.length > 10) {
+            this.paginationOption = [5, 10, 25];
+          } else if (this.member.length <= 10 && this.member.length > 5) {
+            this.paginationOption = [5, 10];
+          } else {
+            this.paginationOption = [5];
+          }
+          this.dataSource = new MatTableDataSource(this.member);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        } else {
+          this.member = result;
+          this.paginationOption = [5];
+          this.dataSource = new MatTableDataSource([this.member]);
+          this.dataSource.paginator = this.paginator;
+          this.dataSource.sort = this.sort;
+        }
+      }, (error: any) => {
+        this.error = true;
+        this.errMsg = error.message;
+        this.dataLoading = false;
+      }, () => {
+        this.error = false;
+        this.dataLoading = false;
+      });
   }
 
   onAddSubmit = (data?: any) => {
+    this.dataLoading = true;
     data.tags = this.tags;
 
-    const snackBarRef = this.snackBar.open('Data saved successfully', 'View Data', {
-      duration: this.snakbarInterval
-    });
+    let snackBarRef = this.snackBar.open('Saving data');
 
-    // snackBarRef.afterDismissed().subscribe(() => {
-    //   console.log('The snack-bar was dismissed');
-    // });
+    this.querySubscription = this.backendService.saveNewProduct(data)
+      .subscribe((result: Product) => {
+        this.member = result;
+        console.log(this.member);
+        if (this.member.length > 50) {
+          this.paginationOption = [5, 10, 25, 50, 100];
+        } else if (this.member.length <= 50 && this.member.length > 25) {
+          this.paginationOption = [5, 10, 25, 50];
+        } else if (this.member.length <= 25 && this.member.length > 10) {
+          this.paginationOption = [5, 10, 25];
+        } else if (this.member.length <= 10 && this.member.length > 5) {
+          this.paginationOption = [5, 10];
+        } else {
+          this.paginationOption = [5];
+        }
+        this.dataSource = new MatTableDataSource(this.member);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
 
-    snackBarRef.onAction().subscribe(() => {
-      alert(JSON.stringify(data));
-    });
+        snackBarRef = this.snackBar.open(`Data saved successfully, Data id: ${this.member[this.member.length - 1].id}`, 'OK!', {
+          duration: this.snakbarInterval
+        });
+
+        // snackBarRef.onAction().subscribe(() => {
+        //   console.log(JSON.stringify(data));
+        // });
+      }, (error: any) => {
+        this.error = true;
+        this.errMsg = error.message;
+        this.dataLoading = false;
+      }, () => {
+        this.error = false;
+        this.dataLoading = false;
+      });
+
   }
 
   onUpdateSubmit = (data?: any) => {
@@ -171,10 +226,34 @@ export class SetproductComponent implements OnInit {
     });
   }
 
+  // SECTION table functions start
   getData = () => {
-    setTimeout(() => {
-      this.refreshDataSource();
-    }, 200);
+    this.dataLoading = true;
+    this.querySubscription = this.backendService.getProducts('products')
+      .subscribe((data: any) => {
+        this.members = data;
+        if (this.members.length > 50) {
+          this.paginationOption = [5, 10, 25, 50, 100];
+        } else if (this.members.length <= 50 && this.members.length > 25) {
+          this.paginationOption = [5, 10, 25, 50];
+        } else if (this.members.length <= 25 && this.members.length > 10) {
+          this.paginationOption = [5, 10, 25];
+        } else if (this.members.length <= 10 && this.members.length > 5) {
+          this.paginationOption = [5, 10];
+        } else {
+          this.paginationOption = [5];
+        }
+        this.dataSource = new MatTableDataSource(this.members);
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      }, (error: any) => {
+        this.error = true;
+        this.errMsg = error.message;
+        this.dataLoading = false;
+      }, () => {
+        this.error = false;
+        this.dataLoading = false;
+      });
   }
 
   applyFilter(filterValue: string) {
@@ -185,27 +264,10 @@ export class SetproductComponent implements OnInit {
     }
   }
 
-  refreshDataSource = () => {
-    this.dataSource = new MatTableDataSource(this.dummy);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+  // !SECTION table functions end
 
-  /** Builds and returns a new User. */
-  createNewDummy = (id: number) => {
-
-    const data: Product = {
-      id: id.toString(),
-      category: 'Clothing',
-      subcategory: 'T-Shirt',
-      product: 'TEAR raindrop tees',
-      tags: ['nice', 'cute'],
-      description: 'dbfiufhwwid wihdfwiuheidefue euhwfihfivudiuevh iudvowhinwihvniwuh',
-      price: Math.floor((Math.random() * 10000) + 1),
-      maxdiscount: Math.floor((Math.random() * 40) + 1),
-      extrataxes: Math.floor((Math.random() * 20) + 1)
-    };
-
-    return data;
+  ngOnDestroy(): void {
+    // tslint:disable-next-line:no-unused-expression
+    if (this.querySubscription) { this.querySubscription.unsubscribe(); }
   }
 }

@@ -62,12 +62,36 @@ mat-card-actions {
   border-left: 3px solid #a94442;
 }
 
+.loader {
+  width: 100%;
+}
+
+.mat-elevation-z8 {
+  max-height: 65vh;
+  overflow: auto;
+}
+
 table {
   width: 100%;
 }
 
 td, th {
   width: auto;
+}
+
+td {
+  border-left: 1px solid rgba(255,255,255,.12);
+  border-collapse: collapse;
+}
+
+#table-filter {
+  width: 50%;
+  margin-left: 50%;
+  transform: translateX(-50%);
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
 }
 
 footer {
