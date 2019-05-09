@@ -9,6 +9,7 @@ import { SettingComponent } from '../../components/general/setting/setting.compo
 import { LoginComponent } from '../../components/general/login/login.component';
 import { DashboardComponent } from '../../components/general/dashboard/dashboard.component';
 import { SetproductComponent } from './../../components/admin/setproduct/setproduct.component';
+import { ProductsComponent } from 'src/app/components/user/products/products.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -17,6 +18,7 @@ const routes: Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'dashboard', component: DashboardComponent},
   {path: 'setproduct', component: SetproductComponent},
+  {path: 'search/:query', component: ProductsComponent},
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 

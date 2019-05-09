@@ -7,6 +7,11 @@
   margin-right: 20px;
 }
 
+mat-form-field {
+  width: 30%;
+  margin: 0 20px;
+}
+
 .fill-remaining-space {
   flex: 1 1 auto;
 }
@@ -29,13 +34,26 @@
   margin: 10px 5px !important;
 }
 
+.responsive-small {
+  display: none;
+}
+
 .responsive-display {
   display: none;
 }
 
 @media screen and (max-width: 650px) {
+
+  mat-form-field {
+    width: auto;
+  }
+
   .responsive {
     display: none;
+  }
+
+  .responsive-small {
+    display: initial;
   }
 
   .responsive-display {

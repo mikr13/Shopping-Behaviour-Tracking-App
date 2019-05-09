@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>Search here</h2>
+<div mat-dialog-content>
+  <mat-form-field appearance="standard" class="responsive">
+    <mat-label>Search product here</mat-label>
+    <input matInput placeholder="Ex: HRX T-Shirt" #search>
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+</div>
+<div mat-dialog-actions>
+  <button mat-button [mat-dialog-close]="search.value">Go!</button>
+</div>

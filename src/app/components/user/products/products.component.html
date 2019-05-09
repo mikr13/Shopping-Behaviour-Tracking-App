@@ -1,0 +1,26 @@
+<div class="main-content">
+  <header pageTitle="Results" iconTitle="list" helpText="This is Product Search quick help section"></header>
+  <main>
+    <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
+      <mat-card class="product-card" *ngFor="let card of cards">
+        <mat-card-header>
+          <div mat-card-avatar class="product-header-image"></div>
+          <mat-card-title>{{ card.name }}</mat-card-title>
+          <mat-card-subtitle>{{ card.type }}</mat-card-subtitle>
+        </mat-card-header>
+        <img mat-card-image src="{{ card.url }}" alt="Photo of a {{ card.name }}">
+        <mat-card-content>
+          <p>
+            {{ card.description }}
+          </p>
+        </mat-card-content>
+        <mat-card-actions>
+          <button mat-button>LIKE</button>
+          <button mat-button>SHARE</button>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </main>
+
+  <footer></footer>
+</div>

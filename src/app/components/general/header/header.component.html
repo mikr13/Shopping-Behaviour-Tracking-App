@@ -10,27 +10,40 @@
   <mat-toolbar-row>
     <button mat-raised-button color="primary" [routerLink]="['/home']" routerLinkActive="router-link-active"
       class="fill-margin" [ngClass]="{'active' : activeToggle === 'home'}">Home</button>
-    <button *ngIf="!adminView" mat-raised-button color="primary" [routerLink]="['/aboutus']" routerLinkActive="router-link-active"
-      class="fill-margin" [ngClass]="{'active' : activeToggle === 'generalinfo'}">General Info</button>
+    <button *ngIf="!adminView" mat-raised-button color="primary" [routerLink]="['/aboutus']"
+      routerLinkActive="router-link-active" class="fill-margin"
+      [ngClass]="{'active' : activeToggle === 'generalinfo'}">More</button>
 
+      <mat-icon  *ngIf="!adminView" matTooltip="Search Product" (click)="openDialog()" class="responsive-small">search</mat-icon>
     <span class="fill-remaining-space"></span>
 
-    <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
-      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
+    <mat-form-field *ngIf="!adminView" appearance="standard" class="responsive">
+      <mat-label>Search product here</mat-label>
+      <input type="text" matInput placeholder="Ex: HRX T-Shirt" (keyup.enter)="routeToProduct($event);">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
 
-    <mat-icon *ngIf="!adminView" matTooltip="Shopping Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
-      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
-      matBadgeColor="warn">shopping_cart</mat-icon>
+    <span class="fill-remaining-space"></span>
+    <mat-icon *ngIf="userStatus !== 'Login/Signup'" matTooltip="Dashboard" [routerLink]="['/dashboard']"
+      routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
+      [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
+
+    <mat-icon *ngIf="!adminView" matTooltip="Shopping Cart" [routerLink]="['/cart']"
+      routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
+      [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}" matBadgeColor="warn">shopping_cart
+    </mat-icon>
 
     <mat-icon matTooltip="{{userStatus}}" [color]="userStatusColor" [routerLink]="['/login']"
       routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
       [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
 
-    <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
-      class="fill-margin mat-icon-click responsive" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
+    <mat-icon *ngIf="userStatus !== 'Login/Signup'" matTooltip="Settings" [routerLink]="['/settings']"
+      routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
+      [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
     </mat-icon>
 
-    <mat-icon matTooltip="Quick help" class="mat-icon-click" [matMenuTriggerFor]="helpbox">help</mat-icon>
+    <mat-icon *ngIf="!adminView" matTooltip="Quick help" class="mat-icon-click" [matMenuTriggerFor]="helpbox">help
+    </mat-icon>
 
     <button mat-icon-button class="responsive-display" [matMenuTriggerFor]="hiddenMenu">
       <mat-icon>more_vert</mat-icon>
@@ -39,7 +52,7 @@
 </mat-toolbar>
 
 <mat-menu #hiddenMenu="matMenu">
-  <button mat-menu-item>
+  <button mat-menu-item *ngIf="userStatus !== 'Login/Signup'">
     <mat-icon matTooltip="Dashboard" [routerLink]="['/dashboard']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
     <span>Dashboard</span>
@@ -48,15 +61,15 @@
     <mat-icon *ngIf="!adminView" matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
       matBadgeColor="warn">shopping_cart</mat-icon>
-      <span>Your Cart</span>
+    <span>Your Cart</span>
   </button>
   <button mat-menu-item>
     <mat-icon matTooltip="{{userStatus}}" [color]="userStatusColor" [routerLink]="['/login']"
       routerLinkActive="router-link-active" class="fill-margin mat-icon-click"
       [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
-      <span>{{userStatus}}</span>
+    <span>{{userStatus}}</span>
   </button>
-  <button mat-menu-item>
+  <button mat-menu-item *ngIf="userStatus !== 'Login/Signup'">
     <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
     </mat-icon>

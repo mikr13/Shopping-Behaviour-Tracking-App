@@ -26,19 +26,39 @@ export class BackendService {
         setTimeout(() => {
           observer.next(fake);
         }, 2000);
-      }
-    );
+    });
   }
 
   getUserStatus = () => {
     const role = ['user', 'admin'];
-    const fake = [true, role[Math.floor(Math.random() * role.length)]];
-    return Observable.create(observer => {
-        setTimeout(() => {
-          observer.next(fake);
-        }, 2000);
+    if (localStorage.getItem('userLoginStatus') === 'false' && localStorage.getItem('userRole') === 'admin') {
+      this.removeUserAuth(0);
+      return Observable.create(observer => {
+        observer.next([false, role[0]]);
+      });
+    } else {
+      if (localStorage.getItem('userLoginStatus') && localStorage.getItem('userRole')) {
+        this.removeUserAuth(60 * 60 * 1000);
+        return Observable.create(observer => {
+          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+        });
+      } else {
+        localStorage.setItem('userLoginStatus', 'true');
+        localStorage.setItem('userRole', role[Math.floor(Math.random() * role.length)]);
+        return Observable.create(observer => {
+          setTimeout(() => {
+          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          }, 2000);
+        });
       }
-    );
+    }
+  }
+
+  private removeUserAuth = (duration: number) => {
+    setTimeout(() => {
+      localStorage.removeItem('userLoginStatus');
+      localStorage.removeItem('userRole');
+    }, duration);
   }
 
   getProducts = (type: string, data?: any) => {
@@ -128,7 +148,7 @@ export class BackendService {
     );
   }
 
-  randomString = (length: number) => {
+  private randomString = (length: number) => {
     const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz ';
     let randomstring = '';
 
@@ -141,7 +161,7 @@ export class BackendService {
   }
 
   /** Builds and returns a new User. */
-  createNewmember = (id: number) => {
+  private createNewmember = (id: number) => {
 
     const category: Array<string> = ['Clothing', 'Watches', 'Tie', 'Issu', 'Suit', 'Basket'];
     const product: Array<string> = ['Tear raindrop tees', 'Rolex watches', 'Burger on', 'Vanilla js', 'Lumfafa'];

@@ -1,9 +1,8 @@
 <div class="main-content">
-  <header pageTitle="Home" iconTitle="home" activeToggle="home" (viewEvent)="receiveStatus($event)"
+  <header pageTitle="Home" iconTitle="home" activeToggle="home"
     helpText="This is Home Page quick help section"></header>
-
+  <mat-spinner *ngIf="statusLoading"></mat-spinner>
   <main>
-    <mat-spinner *ngIf="statusLoading"></mat-spinner>
     <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
       <mat-card class="product-card" *ngFor="let card of cards">
         <mat-card-header>
@@ -24,16 +23,22 @@
       </mat-card>
     </div>
 
-    <div class="content-admin" *ngIf="viewRole === 'admin'" [@moveIn]='state'>
-      <mat-tab-group color="accent" backgroundColor="accent" mat-align-tabs="center">
+    <div class="content-admin" *ngIf="viewRole === 'admin'" [@fallIn]='state'>
+      <mat-tab-group color="primary" backgroundColor="accent" mat-align-tabs="center">
         <mat-tab label="Products">
-          <shop-setproduct></shop-setproduct>
+          <ng-template matTabContent>
+            <shop-setproduct></shop-setproduct>
+          </ng-template>
         </mat-tab>
         <mat-tab label="Orders">
-          <shop-adminorders></shop-adminorders>
+          <ng-template matTabContent>
+            <shop-adminorders></shop-adminorders>
+          </ng-template>
         </mat-tab>
         <mat-tab label="Users">
-          <shop-adminusers></shop-adminusers>
+          <ng-template matTabContent>
+            <shop-adminusers></shop-adminusers>
+          </ng-template>
         </mat-tab>
       </mat-tab-group>
     </div>

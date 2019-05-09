@@ -1,3 +1,36 @@
-<header pageTitle="Dashboard" iconTitle="dashboard" activeToggle="dashboard" helpText="This is Dashboard Page quick help section"></header>
+<div class="main-content">
+  <header pageTitle="Dashboard" iconTitle="dashboard" activeToggle="dashboard"
+    helpText="This is Dashboard Page quick help section"></header>
+  <mat-spinner *ngIf="statusLoading"></mat-spinner>
+  <main>
+    <mat-tab-group *ngIf="viewRole === 'user'" [@fallIn]='state' color="primary" backgroundColor="accent">
+      <mat-tab label="Your Recent Activities">
+        <ng-template matTabContent>
+          <div class="content">
+            <shop-activities userRole="user"></shop-activities>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Your Cart">
+        <ng-template matTabContent>
+          <div class="content">
+            <shop-carts></shop-carts>
+          </div>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="Your orders">
+        <ng-template matTabContent>
+          <div class="content">
+            <shop-orders></shop-orders>
+          </div>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
 
-This Works smooth
+    <div class="content" *ngIf="viewRole === 'admin'" [@fallIn]='state'>
+      <shop-activities userRole="admin"></shop-activities>
+    </div>
+  </main>
+
+  <footer></footer>
+</div>
