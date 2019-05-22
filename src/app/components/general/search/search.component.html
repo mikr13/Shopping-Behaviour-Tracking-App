@@ -1,0 +1,33 @@
+<div class="main-content">
+    <header pageTitle="Results" iconTitle="list" helpText="This is Product Search quick help section"></header>
+    <main>
+      <div class="content" *ngIf="viewRole === 'user' && !productView" [@moveIn]='state'>
+        <mat-card class="product-card" *ngFor="let card of cards; let i=index;">
+          <mat-card-header>
+            <div mat-card-avatar class="product-header-image"></div>
+            <mat-card-title>{{ card.name }}</mat-card-title>
+            <mat-card-subtitle>{{ card.type }}</mat-card-subtitle>
+          </mat-card-header>
+          <img mat-card-image src="{{ card.url }}" alt="Photo of a {{ card.name }}" (click)="toggleProduct(card.id);">
+          <mat-card-content>
+            <p>
+              {{ card.description }}
+            </p>
+          </mat-card-content>
+          <mat-card-actions align="end">
+            <button mat-icon-button (click)="toggleProduct(card.id);">
+              <mat-icon matTooltip="View product">view_carousel</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon matTooltip="Add to favorite">favorite</mat-icon>
+            </button>
+            <button mat-icon-button>
+              <mat-icon matTooltip="Add to cart">add_shopping_cart</mat-icon>
+            </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </main>
+
+    <footer></footer>
+  </div>

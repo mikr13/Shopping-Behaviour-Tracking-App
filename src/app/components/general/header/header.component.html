@@ -57,8 +57,8 @@
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'dashboard'}">dashboard</mat-icon>
     <span>Dashboard</span>
   </button>
-  <button mat-menu-item>
-    <mat-icon *ngIf="!adminView" matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
+  <button mat-menu-item *ngIf="!adminView">
+    <mat-icon matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
       matBadgeColor="warn">shopping_cart</mat-icon>
     <span>Your Cart</span>

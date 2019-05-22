@@ -3,7 +3,7 @@
     helpText="This is Dashboard Page quick help section"></header>
   <mat-spinner *ngIf="statusLoading"></mat-spinner>
   <main>
-    <mat-tab-group *ngIf="viewRole === 'user'" [@fallIn]='state' color="primary" backgroundColor="accent">
+    <mat-tab-group *ngIf="viewRole === 'user'" [@fallIn]='state' mat-align-tabs="center" color="primary" backgroundColor="accent">
       <mat-tab label="Your Recent Activities">
         <ng-template matTabContent>
           <div class="content">

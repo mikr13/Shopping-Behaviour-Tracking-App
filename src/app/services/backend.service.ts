@@ -31,33 +31,81 @@ export class BackendService {
 
   getUserStatus = () => {
     const role = ['user', 'admin'];
-    if (localStorage.getItem('userLoginStatus') === 'false' && localStorage.getItem('userRole') === 'admin') {
-      this.removeUserAuth(0);
+    const status = ['false', 'true'];
+    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole')) {
+      localStorage.setItem('userLoginStatus', status[0]);
+      localStorage.setItem('userRole', role[0]);
       return Observable.create(observer => {
-        observer.next([false, role[0]]);
+        setTimeout(() => {
+        observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+        }, 2000);
+      });
+    } else if (!status.includes(localStorage.getItem('userLoginStatus')) || !role.includes(localStorage.getItem('userRole'))) {
+      return Observable.create(observer => {
+        this.removeUserAuth(0, () => {
+          localStorage.setItem('userLoginStatus', status[0]);
+          localStorage.setItem('userRole', role[0]);
+          setTimeout(() => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+            }, 2000);
+        });
       });
     } else {
-      if (localStorage.getItem('userLoginStatus') && localStorage.getItem('userRole')) {
-        this.removeUserAuth(60 * 60 * 1000);
-        return Observable.create(observer => {
-          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-        });
-      } else {
-        localStorage.setItem('userLoginStatus', 'true');
-        localStorage.setItem('userRole', role[Math.floor(Math.random() * role.length)]);
-        return Observable.create(observer => {
-          setTimeout(() => {
-          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-          }, 2000);
-        });
+      if (localStorage.getItem('userRole') === role[1]) {
+        if (localStorage.getItem('userLoginStatus') === status[0] || !localStorage.getItem('userLoginStatus')) {
+          return Observable.create(observer => {
+            this.removeUserAuth(0, () => {
+              localStorage.setItem('userLoginStatus', status[0]);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+                }, 2000);
+            });
+          });
+        } else if (localStorage.getItem('userLoginStatus') === status[1]) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else {
+          return Observable.create(observer => {
+            this.removeUserAuth(0, () => {
+              localStorage.setItem('userLoginStatus', status[0]);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+                }, 2000);
+            });
+          });
+        }
+      } else if (localStorage.getItem('userRole') === 'user') {
+        if (localStorage.getItem('userLoginStatus') === status[1]) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else if (localStorage.getItem('userLoginStatus') === status[0]) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else {
+          return Observable.create(observer => {
+            this.removeUserAuth(0, () => {
+              localStorage.setItem('userLoginStatus', status[0]);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+                }, 2000);
+            });
+          });
+        }
       }
     }
   }
 
-  private removeUserAuth = (duration: number) => {
+  private removeUserAuth = (duration: number, callback) => {
     setTimeout(() => {
       localStorage.removeItem('userLoginStatus');
       localStorage.removeItem('userRole');
+      callback();
     }, duration);
   }
 
@@ -165,7 +213,7 @@ export class BackendService {
 
     const category: Array<string> = ['Clothing', 'Watches', 'Tie', 'Issu', 'Suit', 'Basket'];
     const product: Array<string> = ['Tear raindrop tees', 'Rolex watches', 'Burger on', 'Vanilla js', 'Lumfafa'];
-    const tags = ['disappear', 'smite', 'recite', 'scarp', 'learning', 'comment', 'scorch', 'leave', 'clover'];
+    const tags: Array<string> = ['disappear', 'smite', 'recite', 'scarp', 'learning', 'comment', 'scorch', 'leave', 'clover'];
 
     const getUnique = (count: number) => {
       // Make a copy of the array

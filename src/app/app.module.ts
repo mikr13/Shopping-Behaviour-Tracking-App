@@ -23,6 +23,7 @@ import { CartsComponent } from './components/user/carts/carts.component';
 import { ActivitiesComponent } from './components/general/activities/activities.component';
 import { ProductsComponent } from './components/user/products/products.component';
 import { DialogComponent } from './components/general/dialog/dialog.component';
+import { SearchComponent } from './components/general/search/search.component';
 
 @NgModule({
   entryComponents: [
@@ -45,7 +46,8 @@ import { DialogComponent } from './components/general/dialog/dialog.component';
     CartsComponent,
     ActivitiesComponent,
     ProductsComponent,
-    DialogComponent
+    DialogComponent,
+    SearchComponent
   ],
   imports: [
     HttpClientModule,

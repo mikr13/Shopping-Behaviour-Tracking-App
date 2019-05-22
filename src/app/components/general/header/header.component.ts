@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() iconTitle: string;
   @Input() activeToggle: string;
   @Input() helpText: string;
-  counter = 0;
+  counter: any = 0;
   userStatusColor = 'accent';
   userStatus = 'Login/Signup';
   userRole: string;
@@ -27,7 +27,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   search: string;
   validator: RegExp;
 
-  constructor(private backendService: BackendService, private dialog: MatDialog, private _router: Router) { }
+  constructor(private backendService: BackendService, private dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.search = 'Hey';
@@ -39,9 +39,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         this.adminView = true;
       } else {
         this.adminView = false;
-        this.backendService.getCartTotal().subscribe((res2: number) => {
-          this.counter = res2;
-        });
+        if (this.userRole === 'user' && res[0] === 'true') {
+          this.backendService.getCartTotal().subscribe((res2: number) => {
+            this.counter = res2;
+          });
+        } else {
+          this.counter = '';
+        }
       }
     });
   }
@@ -50,11 +54,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const validator = `^[a-z ]+$`;
     if (data.match(validator)) {
       data = data.split(' ').join('+');
-      this._router.navigate([`search/:${data}`]);
+      this.router.navigate([`search/:${data}`]);
     } else {
       data = data.replace(/[`~!@#$%^&*()+_|\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
       data = data.split(' ').filter(el => el.length !== 0).join('+');
-      this._router.navigate([`search/:${data}`]);
+      this.router.navigate([`search/:${data}`]);
     }
   }
 
