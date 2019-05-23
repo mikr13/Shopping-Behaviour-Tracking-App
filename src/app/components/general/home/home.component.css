@@ -54,6 +54,39 @@ img:hover {
   -webkit-filter: blur(1px) opacity(75%);
 }
 
+.card-loading {
+  width: 50%;
+  margin: 0 auto;
+}
+
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  opacity: 0;
+  transition: all .2s ease-in-out;
+}
+
+.show-scroll {
+  opacity: 1;
+  transition: all .2s ease-in-out;
+}
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+  opacity: 0;
+  transition: all .2s ease-in-out;
+}
+
+.show-scroll {
+  z-index: 999;
+  opacity: 1;
+  transition: all .2s ease-in-out;
+}
+
 footer {
   margin: auto 0 0 0;
 }

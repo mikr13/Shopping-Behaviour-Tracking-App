@@ -11,6 +11,12 @@ export class BackendService {
 
   member: Product[];
   cart: Array<any> = [];
+  userInterest = {
+    search: [],
+    productClick: [],
+    addCart: [],
+    removeCart: []
+  };
 
   constructor() {
     // Create 500 member
@@ -248,8 +254,17 @@ export class BackendService {
     if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole') || localStorage.getItem('userRole') === 'admin' || localStorage.getItem('userLoginStatus') === 'false') {
       return;
     } else {
-      console.log(type, data);
+      data.time = Date.now();
+      this.userInterest[type].push(data);
     }
+  }
+
+  getuserShoppingInterestData = () => {
+    return Observable.create(observer => {
+      setTimeout(() => {
+        observer.next(this.userInterest);
+      }, 2000);
+    });
   }
 
   getCartTotal = () => {

@@ -4,6 +4,11 @@
   min-height: 100vh;
 }
 
+.spinner {
+  display: block;
+  margin: auto auto;
+}
+
 main {
   position: relative;
 }
@@ -65,7 +70,7 @@ footer {
   margin: auto 0 0 0;
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: 768px) {
 
   .content {
     display: block;

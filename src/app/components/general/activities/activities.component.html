@@ -1,3 +1,77 @@
-<p>
-  {{ userRole }} works!
-</p>
+<mat-spinner *ngIf="statusLoading" class="spinner"></mat-spinner>
+<mat-accordion *ngIf="!statusLoading">
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Searches
+      </mat-panel-title>
+      <mat-panel-description>
+        List of things you searched
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.search.length">
+      <mat-list-item *ngFor="let item of interestData.search">
+        <mat-icon matListIcon>search</mat-icon>
+        <h3 matLine> {{ item.key }} </h3>
+        <p matLine>You searched this at {{ item.time | date}} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Product Views
+      </mat-panel-title>
+      <mat-panel-description>
+        List of products you viewed
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.productClick.length">
+      <mat-list-item *ngFor="let item of interestData.productClick">
+        <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+        <h3 matLine> {{ item.product }} </h3>
+        <p matLine>Category: {{ item.category }}, Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}</p>
+        <p matLine>You viewed this at {{ item.time | date }} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Your Cart addings
+        </mat-panel-title>
+        <mat-panel-description>
+          List of products you added to cart
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <mat-list *ngIf="interestData.addCart.length">
+        <mat-list-item *ngFor="let item of interestData.addCart">
+          <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+          <h3 matLine> {{ item.product }} </h3>
+          <p matLine>Category: {{ item.category }}, Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}, Count: {{ item.count }}, Total: &#8377; {{ item.count * item.price }}</p>
+          <p matLine>You viewed this at {{ item.time | date }} </p>
+        </mat-list-item>
+      </mat-list>
+    </mat-expansion-panel>
+
+    <mat-expansion-panel>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            Your Cart removings
+          </mat-panel-title>
+          <mat-panel-description>
+            List of products you removed from cart (didn't purchase)
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <mat-list *ngIf="interestData.removeCart.length">
+          <mat-list-item *ngFor="let item of interestData.removeCart">
+            <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+            <h3 matLine> {{ item.product }} </h3>
+            <p matLine>Category: {{ item.category }}, Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}, Count: {{ item.count }}, Total: &#8377; {{ item.count * item.price }}</p>
+            <p matLine>You viewed this at {{ item.time | date }} </p>
+          </mat-list-item>
+        </mat-list>
+      </mat-expansion-panel>
+</mat-accordion>

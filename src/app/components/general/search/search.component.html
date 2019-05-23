@@ -1,8 +1,8 @@
 <div class="main-content">
   <header pageTitle="Search" iconTitle="search" helpText="This is Product Search quick help section"></header>
-  <mat-spinner *ngIf="statusLoading"></mat-spinner>
+  <mat-spinner *ngIf="statusLoading" class="spinner"></mat-spinner>
   <main *ngIf="!statusLoading">
-    <div class="content" *ngIf="viewRole === 'user' && !productView" [@moveIn]='state'>
+    <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
       <mat-card class="product-card" *ngFor="let card of cards; let i=index;">
         <mat-card-header>
           <div mat-card-avatar class="product-header-image"></div>
@@ -26,6 +26,10 @@
           </button>
         </mat-card-actions>
       </mat-card>
+
+      <div *ngIf="cards.length === 0" [@moveIn]='state'>
+        <h3>Nothing like that is available in our stores, you might want to rephrase it!</h3>
+      </div>
     </div>
   </main>
 

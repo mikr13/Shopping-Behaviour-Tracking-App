@@ -38,12 +38,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
       this.viewRole = res[1];
     });
 
-    if (this.viewRole === 'admin') {
+    if (this.viewRole !== 'user') {
       this.router.navigate(['']);
     } else {
       this.querySubscription = this.backendService.getProducts('id', this.query).subscribe((data: any) => {
         this.result = data[0];
-        this.backendService.logShoppingInterest('product-click', this.result);
+        this.backendService.logShoppingInterest('productClick', this.result);
         this.statusLoading = false;
       });
 
@@ -90,14 +90,17 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
 
     this.cartUpdate.emit(['add', this.counter]);
-    this.backendService.logShoppingInterest('add-cart', this.result);
+    const dataToSend = this.result;
+    dataToSend.count = this.counter;
+    this.backendService.logShoppingInterest('addCart', dataToSend);
     this.backendService.addRemoveCart('add', id, this.counter);
     this.oldValue = this.counter;
     this.counter = 0;
 
     this.snackBarRef.onAction().subscribe(() => {
       this.cartUpdate.emit(['sub', this.oldValue]);
-      this.backendService.logShoppingInterest('remove-cart', this.result);
+      dataToSend.count = this.oldValue;
+      this.backendService.logShoppingInterest('removeCart', dataToSend);
       this.backendService.addRemoveCart('remove', id, this.oldValue);
       this.snackBar.open('Removed from cart', 'Ok', {
         duration: 3000

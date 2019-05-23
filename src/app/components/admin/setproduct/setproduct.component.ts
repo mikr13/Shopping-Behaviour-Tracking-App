@@ -137,7 +137,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   // SECTION search function start
   onSearchSubmit = (data: any) => {
     this.dataLoading = true;
-    let snackBarRef = this.snackBar.open('Searching data');
+    this.snackBar.open('Searching data');
 
     this.querySubscription = this.backendService.getProducts('product', data)
       .subscribe((result: any) => {
@@ -165,7 +165,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
           this.dataSource.sort = this.sort;
         }
 
-        snackBarRef = this.snackBar.open(`Data search successfully`, 'OK', {
+        this.snackBar.open(`Data search successfully`, 'OK', {
           duration: this.snakbarInterval
         });
       }, (error: any) => {
@@ -183,7 +183,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   onAddSubmit = (data: any) => {
     this.dataLoading = true;
     data.tags = this.tags;
-    let snackBarRef = this.snackBar.open('Saving data');
+    this.snackBar.open('Saving data');
 
     this.querySubscription = this.backendService.saveNewProduct(data)
       .subscribe((result: Product) => {
@@ -203,13 +203,9 @@ export class SetproductComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        snackBarRef = this.snackBar.open(`Data saved successfully, Data id: ${this.member[this.member.length - 1].id}`, 'OK', {
+        this.snackBar.open(`Data saved successfully, Data id: ${this.member[this.member.length - 1].id}`, 'OK', {
           duration: this.snakbarInterval
         });
-
-        // snackBarRef.onAction().subscribe(() => {
-        //   console.log(JSON.stringify(data));
-        // });
       }, (error: any) => {
         this.error = true;
         this.errMsg = error.message;
@@ -225,7 +221,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   getDoc = (id: string) => {
     this.formWait = true;
 
-    let snackBarRef = this.snackBar.open('Please wait, data is loading!');
+    this.snackBar.open('Please wait, data is loading!');
 
     this.querySubscription = this.backendService.getProducts('id', id)
       .subscribe((result: any) => {
@@ -237,7 +233,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
         this.dataLoading = false;
       }, () => {
         this.error = false;
-        snackBarRef = this.snackBar.open('Data loaded successfully', 'OK', {
+        this.snackBar.open('Data loaded successfully', 'OK', {
           duration: this.snakbarInterval
         });
         this.formWait = false;
@@ -247,7 +243,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   onUpdateSubmit = (data: Product) => {
     this.dataLoading = true;
     data.tags = this.tags;
-    let snackBarRef = this.snackBar.open('Updating data');
+    this.snackBar.open('Updating data');
 
     this.querySubscription = this.backendService.updateProduct(data)
       .subscribe((result: Product) => {
@@ -267,13 +263,9 @@ export class SetproductComponent implements OnInit, OnDestroy {
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        snackBarRef = this.snackBar.open(`Data saved successfully, Data id: ${data.id}`, 'OK', {
+        this.snackBar.open(`Data saved successfully, Data id: ${data.id}`, 'OK', {
           duration: this.snakbarInterval
         });
-
-        // snackBarRef.onAction().subscribe(() => {
-        //   console.log(JSON.stringify(data));
-        // });
       }, (error: any) => {
         this.error = true;
         this.errMsg = error.message;
@@ -290,7 +282,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   deleteDoc = (id: string) => {
     if (confirm(`Are you sure you want to delete data with id: ${id}`)) {
       this.dataLoading = true;
-      let snackBarRef = this.snackBar.open(`Deleting data with id: ${id}`);
+      this.snackBar.open(`Deleting data with id: ${id}`);
       this.querySubscription = this.backendService.deleteProduct(id)
         .subscribe((data: any) => {
           this.members = data;
@@ -308,7 +300,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
           this.dataSource = new MatTableDataSource(this.members);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
-          snackBarRef = this.snackBar.open(`Data deleted successfully.`, 'OK', {
+          this.snackBar.open(`Data deleted successfully.`, 'OK', {
             duration: this.snakbarInterval
           });
         }, (error: any) => {

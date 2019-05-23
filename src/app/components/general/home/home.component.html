@@ -4,7 +4,7 @@
   <mat-spinner *ngIf="statusLoading"></mat-spinner>
   <main>
     <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
-      <mat-card class="product-card" *ngFor="let card of cards">
+      <mat-card class="product-card" *ngFor="let card of lazyload">
         <mat-card-header>
           <div mat-card-avatar class="product-header-image"></div>
           <mat-card-title>{{ card.product }}</mat-card-title>
@@ -28,6 +28,14 @@
         </mat-card-actions>
       </mat-card>
     </div>
+    <div *ngIf="cardLoading" class="card-loading">
+      <mat-progress-bar mode="buffer" color="accent"></mat-progress-bar>
+      <h3 align="center">Please wait</h3>
+    </div>
+
+    <button mat-raised-button [ngClass]="{'show-scroll': showScroll}" (click)="smoothscroll()" class="scroll-to-top">
+      <mat-icon matTooltip="Go up">arrow_upward</mat-icon>
+    </button>
 
     <div class="content-admin" *ngIf="viewRole === 'admin'" [@fallIn]='state'>
       <mat-tab-group color="accent" backgroundColor="warm" mat-align-tabs="center">

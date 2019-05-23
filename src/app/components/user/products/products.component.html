@@ -1,6 +1,6 @@
 <div class="main-content">
   <header pageTitle="Product Description" iconTitle="description" [cartUpdate]="cartUpdate" helpText="This is Product quick help section"></header>
-  <mat-spinner *ngIf="statusLoading"></mat-spinner>
+  <mat-spinner *ngIf="statusLoading" class="spinner"></mat-spinner>
   <main *ngIf="!statusLoading">
     <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
       <div class="product-detail-area">

@@ -41,6 +41,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.cards = result;
       this.statusLoading = false;
     });
+
   }
 
   toggleProduct = (id: number) => {

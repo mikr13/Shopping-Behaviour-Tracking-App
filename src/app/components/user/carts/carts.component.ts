@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
@@ -20,6 +20,7 @@ export class CartsComponent implements OnInit, OnDestroy {
   viewRole: string;
   querySubscription: any;
   cartData: any;
+  cartUpdate: EventEmitter<any> = new EventEmitter();
 
   constructor(private backendService: BackendService, private router: Router, private snackBar: MatSnackBar) { }
 
@@ -35,20 +36,22 @@ export class CartsComponent implements OnInit, OnDestroy {
       this.statusLoading = false;
     });
 
-    if (this.viewRole === 'admin') {
+    if (this.viewRole !== 'user') {
       this.router.navigate(['']);
     }
   }
 
   deleteFromCart = (id: string) => {
-    this.backendService.addRemoveCart('remove', id);
     this.snackBar.open(`Item removed from cart`, 'OK', {
       duration: 3000
     });
 
     for (const i of this.cartData) {
       if (i.item.id === id) {
-        this.backendService.logShoppingInterest('remove-cart', i.item);
+        this.backendService.addRemoveCart('remove', id);
+        this.cartUpdate.emit(['sub', i.count]);
+        i.item.count = i.count;
+        this.backendService.logShoppingInterest('removeCart', i.item);
         break;
       }
     }
