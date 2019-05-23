@@ -1,3 +1,25 @@
-<p>
-  carts works!
-</p>
+<div class="main-content">
+  <header pageTitle="Results" iconTitle="shopping_cart" helpText="This is Product Search quick help section"></header>
+  <mat-spinner *ngIf="statusLoading"></mat-spinner>
+  <main *ngIf="!statusLoading">
+    <div class="content" *ngIf="viewRole === 'user'" [@moveIn]='state'>
+
+      <mat-list *ngIf="cartData.length else noData;" disableRipple="false">
+        <h3 mat-subheader>Cart items:</h3>
+        <mat-list-item *ngFor="let item of cartData" class="list-style" disableRipple="false">
+          <a matListAvatar routerLink="/product/:{{item.item.id}}"><img matListAvatar src="{{ item.item.images[0] }}" alt=" {{ item.item.product }}"></a>
+          <h2 matLine> {{ item.item.product }} </h2>
+          <p matLine> {{ item.count }} </p>
+          <p matLine>&#8377; {{ item.item.price }} -- &#8377; {{ item.count * item.item.price }}</p>
+          <button mat-icon-button (click)="deleteFromCart(item.item.id);"><mat-icon matTooltip="Remove from cart">delete</mat-icon></button>
+        </mat-list-item>
+      </mat-list>
+
+      <ng-template #noData>
+        <h2>No item in cart, add some!</h2>
+      </ng-template>
+    </div>
+  </main>
+
+  <footer></footer>
+</div>

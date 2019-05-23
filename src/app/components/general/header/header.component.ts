@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
@@ -26,6 +26,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private querySubscription: any;
   search: string;
   validator: RegExp;
+  @Input() private cartUpdate: EventEmitter<any>;
+  size: string;
 
   constructor(private backendService: BackendService, private dialog: MatDialog, private router: Router) { }
 
@@ -43,22 +45,37 @@ export class HeaderComponent implements OnInit, OnDestroy {
           this.backendService.getCartTotal().subscribe((res2: number) => {
             this.counter = res2;
           });
-        } else {
-          this.counter = '';
         }
       }
     });
+    if (this.cartUpdate) {
+      this.cartUpdate.subscribe((data: string) => {
+        this.updateCart(data);
+      });
+    }
+  }
+
+  private updateCart = (data: any) => {
+    if (data[0] === 'add') {
+      this.counter = parseInt(this.counter, 10) + parseInt(data[1], 10);
+    } else {
+      this.counter = parseInt(this.counter, 10) - parseInt(data[1], 10);
+    }
   }
 
   private navigate = (data: string) => {
-    const validator = `^[a-z ]+$`;
-    if (data.match(validator)) {
-      data = data.split(' ').join('+');
-      this.router.navigate([`search/:${data}`]);
+    if (data.length === 0 || data === null) {
+      return;
     } else {
-      data = data.replace(/[`~!@#$%^&*()+_|\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
-      data = data.split(' ').filter(el => el.length !== 0).join('+');
-      this.router.navigate([`search/:${data}`]);
+      const validator = `^[a-z ]+$`;
+      if (data.match(validator)) {
+        data = data.split(' ').join('+');
+        this.router.navigate([`search/:${data}`]);
+      } else {
+        data = data.replace(/[`~!@#$%^&*()+_|\-=?;:'",.<>\{\}\[\]\\\/]/gi, '');
+        data = data.split(' ').filter(el => el.length !== 0).join('+');
+        this.router.navigate([`search/:${data}`]);
+      }
     }
   }
 
@@ -79,9 +96,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if (this.querySubscription) {
-      this.querySubscription.unsubscribe();
-    }
+    if (this.querySubscription) { this.querySubscription.unsubscribe(); }
   }
 
 }

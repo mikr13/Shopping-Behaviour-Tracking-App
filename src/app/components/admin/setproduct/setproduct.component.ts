@@ -188,7 +188,6 @@ export class SetproductComponent implements OnInit, OnDestroy {
     this.querySubscription = this.backendService.saveNewProduct(data)
       .subscribe((result: Product) => {
         this.member = result;
-        console.log(this.member);
         if (this.member.length > 50) {
           this.paginationOption = [5, 10, 25, 50, 100];
         } else if (this.member.length <= 50 && this.member.length > 25) {

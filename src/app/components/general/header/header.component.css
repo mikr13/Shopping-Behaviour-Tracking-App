@@ -1,6 +1,6 @@
 .title-link {
   text-decoration: none;
-  color: #fff;
+  /* color: #fff; */
 }
 
 .page-title {
@@ -30,7 +30,7 @@ mat-form-field {
 }
 
 .help-section-text {
-  color: #fff !important;
+  /* color: #fff !important; */
   margin: 10px 5px !important;
 }
 

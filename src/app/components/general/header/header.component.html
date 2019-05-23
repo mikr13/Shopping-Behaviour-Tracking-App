@@ -1,4 +1,4 @@
-<mat-toolbar>
+<mat-toolbar color="warm">
   <mat-toolbar-row>
     <a [routerLink]="['/home']" class="title-link">
       <h1>{{title}}</h1>
@@ -60,7 +60,7 @@
   <button mat-menu-item *ngIf="!adminView">
     <mat-icon matTooltip="Your Cart" [routerLink]="['/cart']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'cart'}" matBadge="{{counter}}"
-      matBadgeColor="warn">shopping_cart</mat-icon>
+      matBadgeColor="warn" [matBadgeSize]="size">shopping_cart</mat-icon>
     <span>Your Cart</span>
   </button>
   <button mat-menu-item>

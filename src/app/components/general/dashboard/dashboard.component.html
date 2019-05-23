@@ -3,18 +3,11 @@
     helpText="This is Dashboard Page quick help section"></header>
   <mat-spinner *ngIf="statusLoading"></mat-spinner>
   <main>
-    <mat-tab-group *ngIf="viewRole === 'user'" [@fallIn]='state' mat-align-tabs="center" color="primary" backgroundColor="accent">
+    <mat-tab-group *ngIf="viewRole === 'user'" [@fallIn]='state' mat-align-tabs="center" color="accent" backgroundColor="warm">
       <mat-tab label="Your Recent Activities">
         <ng-template matTabContent>
           <div class="content">
             <shop-activities userRole="user"></shop-activities>
-          </div>
-        </ng-template>
-      </mat-tab>
-      <mat-tab label="Your Cart">
-        <ng-template matTabContent>
-          <div class="content">
-            <shop-carts></shop-carts>
           </div>
         </ng-template>
       </mat-tab>

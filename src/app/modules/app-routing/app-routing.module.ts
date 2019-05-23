@@ -11,6 +11,7 @@ import { DashboardComponent } from '../../components/general/dashboard/dashboard
 import { SetproductComponent } from './../../components/admin/setproduct/setproduct.component';
 import { ProductsComponent } from './../../components/user/products/products.component';
 import { SearchComponent } from './../../components/general/search/search.component';
+import { CartsComponent } from './../../components/user/carts/carts.component';
 
 const routes: Routes = [
   {path: '', component: HomeComponent},
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: 'setproduct', component: SetproductComponent},
   {path: 'search/:query', component: SearchComponent},
   {path: 'product/:id', component: ProductsComponent},
+  {path: 'cart', component: CartsComponent},
   {path: '**', redirectTo: '', pathMatch: 'full'}
 ];
 

@@ -23,6 +23,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   constructor(route: ActivatedRoute, private backendService: BackendService, private router: Router) {
     this.query = route.snapshot.params.query;
     this.query = this.query.split(':')[1].split('+').join(' ');
+    this.backendService.logShoppingInterest('search', {key: this.query});
   }
 
   ngOnInit() {
@@ -30,27 +31,20 @@ export class SearchComponent implements OnInit, OnDestroy {
 
     this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
-      this.statusLoading = false;
     });
 
-    this.cards = [{
-      id: '989380_dusgu_21',
-      name: this.query,
-      type: 'Dog Breed',
-      description: 'The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan. A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally bred for hunting.',
-      url: 'https://material.angular.io/assets/img/examples/shiba2.jpg'
-    }, {
-      id: '342525_jngtn_22',
-      name: 'Octo Rocto',
-      type: 'Slimy Octopus',
-      description: 'This tiny octopus looks as though it could be a character out of a Pixar movie. With large eyes, tiny flapping fins and a blob-like body, the octopus is too adorable.',
-      url: 'https://cdn.pixabay.com/photo/2016/08/31/13/56/fish-1633525_640.jpg'
-    }];
+    const data = {
+      product: this.query
+    };
+
+    this.querySubscription = this.backendService.getProducts('product', data).subscribe((result: any) => {
+      this.cards = result;
+      this.statusLoading = false;
+    });
   }
 
   toggleProduct = (id: number) => {
-    // this.router.navigate([`product/:${id}`]);
-    this.router.navigate([`product/:989380_dusgu_21`]);
+    this.router.navigate([`product/:${id}`]);
   }
 
   ngOnDestroy(): void {
