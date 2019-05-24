@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
-import { moveIn, fallIn } from 'src/app/shared/router.animation';
+import { fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
   selector: 'shop-carts',
   templateUrl: './carts.component.html',
   styleUrls: ['./carts.component.css'],
-  animations: [moveIn(), fallIn()],
+  animations: [fallIn()],
   // tslint:disable-next-line:use-host-property-decorator
   host: {'@moveIn': ''}
 })

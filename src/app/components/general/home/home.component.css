@@ -78,12 +78,16 @@ img:hover {
   bottom: 15px;
   right: 15px;
   opacity: 0;
+  pointer-events: none;
+  cursor: initial;
   transition: all .2s ease-in-out;
 }
 
 .show-scroll {
   z-index: 999;
   opacity: 1;
+  pointer-events: auto;
+  cursor: pointer;
   transition: all .2s ease-in-out;
 }
 

@@ -1,3 +1,139 @@
 <div class="content">
-  <p>Working!</p>
+  <mat-card>
+    <div *ngIf="(toggleField === 'searchMode') else ((toggleField === 'editMode') ? showEditMode : showResultMode)">
+      <mat-card-header>
+        <span matTooltip="Shoe recent results">
+          <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
+            <mat-icon>supervised_user_circle</mat-icon>
+          </button>
+        </span>
+      </mat-card-header>
+      <mat-card-content>
+        <!-- Search page here -->
+        <div class="title">
+          <h3>Search users:</h3>
+        </div>
+        <form (ngSubmit)="toggle('resultMode');onSearchSubmit(searchForm.value)" #searchForm="ngForm">
+          <mat-form-field hintLabel="User ID | Max 15 characters">
+            <input matInput type="text" minlength="3" maxlength="15" [(ngModel)]="userData.userID" #userID="ngModel"
+              placeholder="Enter the user ID" name="userID" required>
+            <mat-hint align="end">{{userData.userID?.length || 0}}/15</mat-hint>
+          </mat-form-field>
+          <div [hidden]="userID.valid || userID.pristine" class="alert alert-danger">
+            User ID is required
+          </div>
+          <br><br>
+          <mat-form-field hintLabel="User Phone number | Max 10 digits">
+            <input matInput #input type="tel" minlength="10" maxlength="10" [(ngModel)]="userData.phone"
+              #phone="ngModel" placeholder="Enter the user phone number" name="phone" required>
+            <mat-hint align="end">{{input.value?.length || 0}}/10</mat-hint>
+            <!-- using local reference to get length above -->
+          </mat-form-field>
+          <div [hidden]="phone.valid || phone.pristine" class="alert alert-danger">
+            Phone number is required
+          </div>
+          <br><br>
+          <mat-card-actions>
+            <button type="submit" mat-raised-button color="primary" [disabled]="!searchForm.form.valid">Submit</button>
+            <button type="reset" mat-raised-button color="accent">Reset</button>
+          </mat-card-actions>
+        </form>
+      </mat-card-content>
+    </div>
+  </mat-card>
+
+  <ng-template #showEditMode>
+  </ng-template>
+
+  <ng-template #showResultMode>
+    <mat-card-header>
+      <span matTooltip="Search product">
+        <button mat-fab color="primary" (click)="toggle('searchMode');">
+          <mat-icon>search</mat-icon>
+        </button>
+      </span>
+    </mat-card-header>
+    <mat-card-content>
+
+      <mat-form-field id="table-filter">
+        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+      </mat-form-field>
+
+      <div class="loader" *ngIf="dataLoading">
+        <mat-progress-bar mode="query" color="warn"></mat-progress-bar>
+      </div>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" matSort>
+
+          <ng-container matColumnDef="orderID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Order ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.orderID}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="userID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> User ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.userID}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone No </th>
+            <td mat-cell *matCellDef="let row"> {{row.phone}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="product">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Ordered Item </th>
+            <td mat-cell *matCellDef="let row"> {{row.product}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="productID">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product ID </th>
+            <td mat-cell *matCellDef="let row"> {{row.productID}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="productCount">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Count </th>
+            <td mat-cell *matCellDef="let row"> {{row.productCount}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cost">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Product Cost </th>
+            <td mat-cell *matCellDef="let row"> {{row.cost}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="expectedDelivery">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Expected delivery </th>
+            <td mat-cell *matCellDef="let row"> {{row.expectedDelivery | date}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="execContact">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header> Delivery executive contact </th>
+            <td mat-cell *matCellDef="let row"> {{row.execContact}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let row">
+              <span matTooltip="Edit">
+                <button mat-icon-button (click)="getDoc(row.orderID);toggle('editMode');">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </span>
+              <span matTooltip="Delete">
+                <button mat-icon-button (click)="deleteDoc(row.orderID);toggle('resultMode');">
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </span>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;">
+          </tr>
+        </table>
+
+        <mat-paginator pageSize="10" [pageSizeOptions]=paginationOption></mat-paginator>
+      </div>
+
+    </mat-card-content>
+  </ng-template>
 </div>

@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { moveIn, fallIn } from 'src/app/shared/router.animation';
+import { fallIn } from 'src/app/shared/router.animation';
 
 import { BackendService } from 'src/app/services/backend.service';
 
@@ -7,9 +7,9 @@ import { BackendService } from 'src/app/services/backend.service';
   selector: 'shop-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  animations: [moveIn(), fallIn()],
+  animations: [fallIn()],
   // tslint:disable-next-line:use-host-property-decorator
-  host: {'@moveIn': ''}
+  host: {'@fallIn': ''}
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   state = '';

@@ -3,13 +3,15 @@ import { Observable } from 'rxjs';
 
 import { environment } from 'src/environments/environment.prod';
 import { Product } from '../shared/Product';
+import { Orders } from '../shared/Orders';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BackendService {
 
-  member: Product[];
+  products: any[];
+  orders: any[];
   cart: Array<any> = [];
   userInterest = {
     search: [],
@@ -19,8 +21,10 @@ export class BackendService {
   };
 
   constructor() {
-    // Create 500 member
-    this.member = Array.from({ length: 200 }, (_, k) => this.createNewmember(k + 1));
+    // Create 200 products
+    this.products = Array.from({ length: 200 }, (_, k) => this.createNewmember('products', k + 1));
+    // Create 50 orders
+    this.orders = Array.from({ length: 200 }, (_, k) => this.createNewmember('orders', k + 1));
   }
 
   getConfig = () => {
@@ -111,13 +115,13 @@ export class BackendService {
     if (type === 'products') {
       return Observable.create(observer => {
         setTimeout(() => {
-          observer.next(this.member);
+          observer.next(this.products);
           observer.complete();
         }, 2000);
       }
       );
     } else if (type === 'product') {
-      const result = this.member.filter(el => {
+      const result = this.products.filter(el => {
         if (data.category) {
           if (el.category === data.category && el.product === data.product) {
             return el;
@@ -136,7 +140,7 @@ export class BackendService {
       }
       );
     } else if (type === 'id') {
-      const result = this.member.filter(el => {
+      const result = this.products.filter(el => {
         if (el.id === data) {
           return el;
         }
@@ -152,11 +156,11 @@ export class BackendService {
   }
 
   saveNewProduct = (data: any) => {
-    data.id = this.member.length + 1;
-    this.member.push(data);
+    data.id = this.products.length + 1;
+    this.products.push(data);
     return Observable.create(observer => {
       setTimeout(() => {
-        observer.next(this.member);
+        observer.next(this.products);
         observer.complete();
       }, 5000);
     }
@@ -164,24 +168,24 @@ export class BackendService {
   }
 
   updateProduct = (data: Product) => {
-    if (this.member.includes(data)) {
+    if (this.products.includes(data)) {
       return Observable.create(observer => {
         setTimeout(() => {
-          observer.next(this.member);
+          observer.next(this.products);
           observer.complete();
         }, 2000);
       }
       );
     } else {
-      for (let i = 0; i < this.member.length; i++) {
-        if (this.member[i].id === data.id) {
-          this.member[i] = data;
+      for (let i = 0; i < this.products.length; i++) {
+        if (this.products[i].id === data.id) {
+          this.products[i] = data;
           break;
         }
       }
       return Observable.create(observer => {
         setTimeout(() => {
-          observer.next(this.member);
+          observer.next(this.products);
           observer.complete();
         }, 5000);
       }
@@ -190,10 +194,10 @@ export class BackendService {
   }
 
   deleteProduct = (id: Product['id']) => {
-    this.member = this.member.filter(el => !(el.id === id));
+    this.products = this.products.filter(el => !(el.id === id));
     return Observable.create(observer => {
       setTimeout(() => {
-        observer.next(this.member);
+        observer.next(this.products);
         observer.complete();
       }, 2000);
     }
@@ -213,41 +217,60 @@ export class BackendService {
   }
 
   /** Builds and returns a new User. */
-  private createNewmember = (id: number) => {
+  private createNewmember = (type: string, id: number) => {
+    if (type === 'products') {
+      const category: Array<string> = ['Clothing', 'Watches', 'Tie', 'Issu', 'Suit', 'Basket'];
+      const product: Array<string> = ['Tear raindrop tees', 'Rolex watches', 'Burger on', 'Vanilla js', 'Lumfafa'];
+      const tags: Array<string> = ['disappear', 'smite', 'recite', 'scarp', 'learning', 'comment', 'scorch', 'leave', 'clover'];
+      const images: Array<string> = ['https://material.angular.io/assets/img/examples/shiba2.jpg', 'https://cdn.pixabay.com/photo/2016/08/31/13/56/fish-1633525_640.jpg', 'https://cdn.pixabay.com/photo/2017/08/13/06/37/animal-2636367_640.jpg', 'https://cdn.pixabay.com/photo/2014/05/20/21/20/easter-349026_640.jpg'];
 
-    const category: Array<string> = ['Clothing', 'Watches', 'Tie', 'Issu', 'Suit', 'Basket'];
-    const product: Array<string> = ['Tear raindrop tees', 'Rolex watches', 'Burger on', 'Vanilla js', 'Lumfafa'];
-    const tags: Array<string> = ['disappear', 'smite', 'recite', 'scarp', 'learning', 'comment', 'scorch', 'leave', 'clover'];
-    const images: Array<string> = ['https://material.angular.io/assets/img/examples/shiba2.jpg', 'https://cdn.pixabay.com/photo/2016/08/31/13/56/fish-1633525_640.jpg', 'https://cdn.pixabay.com/photo/2017/08/13/06/37/animal-2636367_640.jpg', 'https://cdn.pixabay.com/photo/2014/05/20/21/20/easter-349026_640.jpg'];
+      const getUnique = (data: any, count: number) => {
+        // Make a copy of the array
+        const tmp = data.slice(0, data.length);
+        const ret = [];
 
-    const getUnique = (data: any, count: number) => {
-      // Make a copy of the array
-      const tmp = data.slice(0, data.length);
-      const ret = [];
+        for (let i = 0; i < count; i++) {
+          const index = Math.floor(Math.random() * tmp.length);
+          const removed = tmp.splice(index, 1);
+          // Since we are only removing one element
+          ret.push(removed[0]);
+        }
+        return ret;
+      };
 
-      for (let i = 0; i < count; i++) {
-        const index = Math.floor(Math.random() * tmp.length);
-        const removed = tmp.splice(index, 1);
-        // Since we are only removing one element
-        ret.push(removed[0]);
-      }
-      return ret;
-    };
+      const data = {
+        id: id.toString(),
+        category: category[Math.floor((Math.random() * category.length))],
+        subcategory: 'T-Shirt',
+        product: product[Math.floor((Math.random() * product.length))],
+        tags: getUnique(tags, Math.floor((Math.random() * tags.length) / 2 + 1)),
+        description: this.randomString(Math.floor((Math.random() * 500) + 1)),
+        price: Math.floor((Math.random() * 10000) + 1),
+        maxdiscount: Math.floor((Math.random() * 40) + 1),
+        extrataxes: Math.floor((Math.random() * 20) + 1),
+        images: getUnique(images, Math.floor(Math.random() * 3) + 1)
+      };
 
-    const data = {
-      id: id.toString(),
-      category: category[Math.floor((Math.random() * category.length))],
-      subcategory: 'T-Shirt',
-      product: product[Math.floor((Math.random() * product.length))],
-      tags: getUnique(tags, Math.floor((Math.random() * tags.length) / 2 + 1)),
-      description: this.randomString(Math.floor((Math.random() * 500) + 1)),
-      price: Math.floor((Math.random() * 10000) + 1),
-      maxdiscount: Math.floor((Math.random() * 40) + 1),
-      extrataxes: Math.floor((Math.random() * 20) + 1),
-      images: getUnique(images, Math.floor(Math.floor(Math.random() * 3) + 1))
-    };
+      return data;
+    } else {
+      const phone: Array<string> = ['9062987052', '9113407684', '8697935383', '8797185175', '7209783038'];
+      const productMatch = Math.floor((Math.random() * this.products.length)); // to map with product in products array
+      const cartCount = Math.floor((Math.random() * 3) + 1);
 
-    return data;
+      const data: Orders = {
+        orderID: id.toString(),
+        userID: this.randomString(Math.floor((Math.random() * 10) + 3)),
+        phone: phone[Math.floor((Math.random() * phone.length))],
+        product: this.products[productMatch].product,
+        productID: this.products[productMatch].id,
+        productCount: cartCount,
+        cost: cartCount * this.products[productMatch].price,
+        expectedDelivery: Date.now() + Math.floor(Math.random() * 10000000000),
+        execContact: phone[Math.floor((Math.random() * phone.length))]
+      };
+
+      return data;
+    }
   }
 
   logShoppingInterest = (type: string, data: any) => {
@@ -299,7 +322,7 @@ export class BackendService {
       }
     }
 
-    const data = this.member.filter(el => {
+    const data = this.products.filter(el => {
       if (el.id === id) {
         return el;
       }
@@ -322,6 +345,44 @@ export class BackendService {
       }
     } else {
       this.cart.splice(result, 1);
+    }
+  }
+
+  getOrders = (type: string, data?: any) => {
+    if (type === 'orders') {
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(this.orders);
+          observer.complete();
+        }, 2000);
+      }
+      );
+    } else if (type === 'order') {
+      const result = this.orders.filter(el => {
+          if (el.userID === data.userID && el.phone === data.phone) {
+            return el;
+          }
+      });
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(result);
+          observer.complete();
+        }, 2000);
+      }
+      );
+    } else if (type === 'id') {
+      const result = this.orders.filter(el => {
+        if (el.orderID === data) {
+          return el;
+        }
+      });
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(result);
+          observer.complete();
+        }, 2000);
+      }
+      );
     }
   }
 }

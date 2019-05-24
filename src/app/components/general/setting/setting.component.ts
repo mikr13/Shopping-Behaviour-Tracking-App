@@ -28,7 +28,7 @@ export class SettingComponent implements OnInit, OnDestroy {
       this.statusLoading = false;
     });
 
-    if (this.viewRole !== 'user') {
+    if (this.viewRole !== 'admin') {
       this.router.navigate(['']);
     }
   }

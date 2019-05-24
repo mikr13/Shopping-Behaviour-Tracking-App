@@ -1,6 +1,5 @@
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
-import { moveIn, fallIn } from 'src/app/shared/router.animation';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete, MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
@@ -11,24 +10,13 @@ import { Router } from '@angular/router';
 import { Product } from './../../../shared/Product';
 import { BackendService } from 'src/app/services/backend.service';
 
-/** Constants used to fill up our data base. */
-const COLORS: string[] = ['maroon', 'red', 'orange', 'yellow', 'olive', 'green', 'purple',
-  'fuchsia', 'lime', 'teal', 'aqua', 'blue', 'navy', 'black', 'gray'];
-const NAMES: string[] = ['Maia', 'Asher', 'Olivia', 'Atticus', 'Amelia', 'Jack',
-  'Charlotte', 'Theodore', 'Isla', 'Oliver', 'Isabella', 'Jasper',
-  'Cora', 'Levi', 'Violet', 'Arthur', 'Mia', 'Thomas', 'Elizabeth'];
-
 @Component({
   selector: 'shop-setproduct',
   templateUrl: './setproduct.component.html',
-  styleUrls: ['./setproduct.component.css'],
-  animations: [moveIn(), fallIn()],
-  // tslint:disable-next-line:use-host-property-decorator
-  host: {'@moveIn': ''}
+  styleUrls: ['./setproduct.component.css']
 })
 export class SetproductComponent implements OnInit, OnDestroy {
 
-  state = '';
   toggleField: string;
   productData = { category: '', product: '', fromDate: '', toDate: '' };
   newProductData: Product;

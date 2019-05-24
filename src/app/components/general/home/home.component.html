@@ -28,7 +28,7 @@
         </mat-card-actions>
       </mat-card>
     </div>
-    <div *ngIf="cardLoading" class="card-loading">
+    <div *ngIf="cardLoading && viewRole === 'user'" class="card-loading">
       <mat-progress-bar mode="buffer" color="accent"></mat-progress-bar>
       <h3 align="center">Please wait</h3>
     </div>

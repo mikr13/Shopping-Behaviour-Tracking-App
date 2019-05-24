@@ -1,14 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { moveIn, fallIn } from 'src/app/shared/router.animation';
+import { moveIn} from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
 
 @Component({
   selector: 'shop-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.css'],
-  animations: [moveIn(), fallIn()],
+  animations: [moveIn()],
   // tslint:disable-next-line:use-host-property-decorator
   host: {'@moveIn': ''}
 })
