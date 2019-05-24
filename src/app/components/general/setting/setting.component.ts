@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { moveIn, fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
@@ -17,7 +18,7 @@ export class SettingComponent implements OnInit, OnDestroy {
   viewRole: string;
   querySubscription: any;
 
-  constructor(private backendService: BackendService) { }
+  constructor(private backendService: BackendService, private router: Router) { }
 
   ngOnInit() {
     this.statusLoading = true;
@@ -26,6 +27,10 @@ export class SettingComponent implements OnInit, OnDestroy {
       this.viewRole = res[1];
       this.statusLoading = false;
     });
+
+    if (this.viewRole !== 'user') {
+      this.router.navigate(['']);
+    }
   }
 
   ngOnDestroy(): void {

@@ -6,6 +6,7 @@ import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete, MatSn
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { Product } from './../../../shared/Product';
 import { BackendService } from 'src/app/services/backend.service';
@@ -64,22 +65,33 @@ export class SetproductComponent implements OnInit, OnDestroy {
   private querySubscription: any;
   error: boolean;
   errMsg: any;
+  viewRole: string;
 
-  constructor(private snackBar: MatSnackBar, private backendService: BackendService) {
+  constructor(private snackBar: MatSnackBar, private backendService: BackendService, private router: Router) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
   }
 
   ngOnInit() {
-    this.toggleField = 'searchMode';
-    this.newProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
-    this.updateProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
-    // Assign the data to the data source for the table to render
-    this.dataSource = new MatTableDataSource(this.members);
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-    this.dataLoading = false;
+
+    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+      this.viewRole = res[1];
+    });
+
+    if (this.viewRole !== 'admin') {
+      this.router.navigate(['']);
+    } else {
+      this.toggleField = 'searchMode';
+      this.newProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
+      this.updateProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
+      // Assign the data to the data source for the table to render
+      this.dataSource = new MatTableDataSource(this.members);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.dataLoading = false;
+    }
+
   }
 
   toggle = (filter?: any) => {

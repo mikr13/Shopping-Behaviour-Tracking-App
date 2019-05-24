@@ -37,7 +37,7 @@
       routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
       [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
 
-    <mat-icon *ngIf="userStatus !== 'Login/Signup'" matTooltip="Settings" [routerLink]="['/settings']"
+    <mat-icon *ngIf="userStatus !== 'Login/Signup' && adminView" matTooltip="Settings" [routerLink]="['/settings']"
       routerLinkActive="router-link-active" class="fill-margin mat-icon-click responsive"
       [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
     </mat-icon>
@@ -69,7 +69,7 @@
       [ngClass]="{'active' : activeToggle === 'login'}">account_box</mat-icon>
     <span>{{userStatus}}</span>
   </button>
-  <button mat-menu-item *ngIf="userStatus !== 'Login/Signup'">
+  <button mat-menu-item *ngIf="userStatus !== 'Login/Signup' && adminView">
     <mat-icon matTooltip="Settings" [routerLink]="['/settings']" routerLinkActive="router-link-active"
       class="fill-margin mat-icon-click" [ngClass]="{'active' : activeToggle === 'settings'}">settings_applications
     </mat-icon>
