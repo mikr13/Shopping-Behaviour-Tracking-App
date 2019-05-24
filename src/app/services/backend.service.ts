@@ -19,6 +19,15 @@ export class BackendService {
     addCart: [],
     removeCart: []
   };
+  adminActivity = {
+    searchProduct: [],
+    editProduct: [],
+    deleteProduct: [],
+    searchUserOrder: [],
+    editUserOrder: [],
+    deleteUserOrder: [],
+    statsCheck: []
+  };
 
   constructor() {
     // Create 200 products
@@ -200,8 +209,7 @@ export class BackendService {
         observer.next(this.products);
         observer.complete();
       }, 2000);
-    }
-    );
+    });
   }
 
   private randomString = (length: number) => {
@@ -216,7 +224,6 @@ export class BackendService {
     return randomstring;
   }
 
-  /** Builds and returns a new User. */
   private createNewmember = (type: string, id: number) => {
     if (type === 'products') {
       const category: Array<string> = ['Clothing', 'Watches', 'Tie', 'Issu', 'Suit', 'Basket'];
@@ -274,9 +281,10 @@ export class BackendService {
   }
 
   logShoppingInterest = (type: string, data: any) => {
-    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole') || localStorage.getItem('userRole') === 'admin' || localStorage.getItem('userLoginStatus') === 'false') {
+    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole') || localStorage.getItem('userRole') !== 'user' || localStorage.getItem('userLoginStatus') !== 'true') {
       return;
     } else {
+      console.log(type, data);
       data.time = Date.now();
       this.userInterest[type].push(data);
     }
@@ -359,9 +367,9 @@ export class BackendService {
       );
     } else if (type === 'order') {
       const result = this.orders.filter(el => {
-          if (el.userID === data.userID && el.phone === data.phone) {
-            return el;
-          }
+        if (el.userID === data.userID && el.phone === data.phone) {
+          return el;
+        }
       });
       return Observable.create(observer => {
         setTimeout(() => {
@@ -383,6 +391,52 @@ export class BackendService {
         }, 2000);
       }
       );
+    }
+  }
+
+  updateOrder = (data: Orders) => {
+    if (this.orders.includes(data)) {
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(this.orders);
+          observer.complete();
+        }, 2000);
+      }
+      );
+    } else {
+      for (let i = 0; i < this.orders.length; i++) {
+        if (this.orders[i].orderID === data.orderID) {
+          this.orders[i] = data;
+          break;
+        }
+      }
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next(this.orders);
+          observer.complete();
+        }, 5000);
+      }
+      );
+    }
+  }
+
+  deleteOrder = (orderID: Orders['orderID']) => {
+    this.orders = this.orders.filter(el => !(el.orderID === orderID));
+    return Observable.create(observer => {
+      setTimeout(() => {
+        observer.next(this.orders);
+        observer.complete();
+      }, 2000);
+    });
+  }
+
+  logAdminActivity = (type: string, data: any) => {
+    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole') || localStorage.getItem('userRole') !== 'admin' || localStorage.getItem('userLoginStatus') !== 'true') {
+      return;
+    } else {
+      data.time = Date.now();
+      this.adminActivity[type].push(data);
+      console.log(this.adminActivity);
     }
   }
 }

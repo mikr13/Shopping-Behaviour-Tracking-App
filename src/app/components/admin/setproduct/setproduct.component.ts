@@ -30,13 +30,13 @@ export class SetproductComponent implements OnInit, OnDestroy {
   filteredTags: Observable<string[]>;
   tags: string[] = ['Example', 'Without-Space'];
   allTags: string[] = ['Formal-Shirt', 'Casual-Shirt', 'T-Shirt',
-                        'Formal-Trousers', 'Casual-Trousers', 'Jeans', 'Chinos', 'Joggers',
-                        'Watches', 'Smart-Watches', 'Braclets',
-                        'Belt', 'Purse', 'Tie',
-                        'Under-Garments', 'Night-Wear', 'Gym-Wear',
-                        'Headphones', 'Wireless-Headphones',
-                        'Spectacles', 'Sun-Glasses',
-                        'Casual-Shoes', 'Formal-Shoes', 'Loafers'];
+    'Formal-Trousers', 'Casual-Trousers', 'Jeans', 'Chinos', 'Joggers',
+    'Watches', 'Smart-Watches', 'Braclets',
+    'Belt', 'Purse', 'Tie',
+    'Under-Garments', 'Night-Wear', 'Gym-Wear',
+    'Headphones', 'Wireless-Headphones',
+    'Spectacles', 'Sun-Glasses',
+    'Casual-Shoes', 'Formal-Shoes', 'Loafers'];
   dataSource: MatTableDataSource<Product>;
   @ViewChild('tagInput') tagInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
@@ -45,8 +45,8 @@ export class SetproductComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
   displayedColumns = ['id', 'category', 'subcategory', 'product', 'tags', 'price', 'maxdiscount', 'extrataxes', 'action'];
   snakbarInterval = 5000;
-  members: Array<Product>;
-  member: any;
+  products: Array<Product>;
+  product: any;
   paginationOption: Array<number>;
   dataLoading: boolean;
   formWait: boolean;
@@ -74,7 +74,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
       this.newProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
       this.updateProductData = { id: '', category: '', subcategory: '', product: '', tags: [], description: '', price: null, maxdiscount: null, extrataxes: null };
       // Assign the data to the data source for the table to render
-      this.dataSource = new MatTableDataSource(this.members);
+      this.dataSource = new MatTableDataSource(this.products);
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
       this.dataLoading = false;
@@ -142,25 +142,25 @@ export class SetproductComponent implements OnInit, OnDestroy {
     this.querySubscription = this.backendService.getProducts('product', data)
       .subscribe((result: any) => {
         if (Array.isArray(result)) {
-          this.member = result;
-          if (this.member.length > 50) {
+          this.product = result;
+          if (this.product.length > 50) {
             this.paginationOption = [5, 10, 25, 50, 100];
-          } else if (this.member.length <= 50 && this.member.length > 25) {
+          } else if (this.product.length <= 50 && this.product.length > 25) {
             this.paginationOption = [5, 10, 25, 50];
-          } else if (this.member.length <= 25 && this.member.length > 10) {
+          } else if (this.product.length <= 25 && this.product.length > 10) {
             this.paginationOption = [5, 10, 25];
-          } else if (this.member.length <= 10 && this.member.length > 5) {
+          } else if (this.product.length <= 10 && this.product.length > 5) {
             this.paginationOption = [5, 10];
           } else {
             this.paginationOption = [5];
           }
-          this.dataSource = new MatTableDataSource(this.member);
+          this.dataSource = new MatTableDataSource(this.product);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         } else {
-          this.member = result;
+          this.product = result;
           this.paginationOption = [5];
-          this.dataSource = new MatTableDataSource([this.member]);
+          this.dataSource = new MatTableDataSource([this.product]);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
         }
@@ -168,6 +168,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
         this.snackBar.open(`Data search successfully`, 'OK', {
           duration: this.snakbarInterval
         });
+        this.backendService.logAdminActivity('searchProduct', data);
       }, (error: any) => {
         this.error = true;
         this.errMsg = error.message;
@@ -186,24 +187,24 @@ export class SetproductComponent implements OnInit, OnDestroy {
     this.snackBar.open('Saving data');
 
     this.querySubscription = this.backendService.saveNewProduct(data)
-      .subscribe((result: Product) => {
-        this.member = result;
-        if (this.member.length > 50) {
+      .subscribe((result: Product[]) => {
+        this.products = result;
+        if (this.products.length > 50) {
           this.paginationOption = [5, 10, 25, 50, 100];
-        } else if (this.member.length <= 50 && this.member.length > 25) {
+        } else if (this.products.length <= 50 && this.products.length > 25) {
           this.paginationOption = [5, 10, 25, 50];
-        } else if (this.member.length <= 25 && this.member.length > 10) {
+        } else if (this.products.length <= 25 && this.products.length > 10) {
           this.paginationOption = [5, 10, 25];
-        } else if (this.member.length <= 10 && this.member.length > 5) {
+        } else if (this.products.length <= 10 && this.products.length > 5) {
           this.paginationOption = [5, 10];
         } else {
           this.paginationOption = [5];
         }
-        this.dataSource = new MatTableDataSource(this.member);
+        this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
-        this.snackBar.open(`Data saved successfully, Data id: ${this.member[this.member.length - 1].id}`, 'OK', {
+        this.snackBar.open(`Data saved successfully, Data id: ${this.products[this.products.length - 1].id}`, 'OK', {
           duration: this.snakbarInterval
         });
       }, (error: any) => {
@@ -220,7 +221,6 @@ export class SetproductComponent implements OnInit, OnDestroy {
   // SECTION update function start
   getDoc = (id: string) => {
     this.formWait = true;
-
     this.snackBar.open('Please wait, data is loading!');
 
     this.querySubscription = this.backendService.getProducts('id', id)
@@ -246,26 +246,28 @@ export class SetproductComponent implements OnInit, OnDestroy {
     this.snackBar.open('Updating data');
 
     this.querySubscription = this.backendService.updateProduct(data)
-      .subscribe((result: Product) => {
-        this.member = result;
-        if (this.member.length > 50) {
+      .subscribe((result: Product[]) => {
+        this.products = result;
+        if (this.products.length > 50) {
           this.paginationOption = [5, 10, 25, 50, 100];
-        } else if (this.member.length <= 50 && this.member.length > 25) {
+        } else if (this.products.length <= 50 && this.products.length > 25) {
           this.paginationOption = [5, 10, 25, 50];
-        } else if (this.member.length <= 25 && this.member.length > 10) {
+        } else if (this.products.length <= 25 && this.products.length > 10) {
           this.paginationOption = [5, 10, 25];
-        } else if (this.member.length <= 10 && this.member.length > 5) {
+        } else if (this.products.length <= 10 && this.products.length > 5) {
           this.paginationOption = [5, 10];
         } else {
           this.paginationOption = [5];
         }
-        this.dataSource = new MatTableDataSource(this.member);
+        this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
 
         this.snackBar.open(`Data saved successfully, Data id: ${data.id}`, 'OK', {
           duration: this.snakbarInterval
         });
+
+        this.backendService.logAdminActivity('editProduct', data);
       }, (error: any) => {
         this.error = true;
         this.errMsg = error.message;
@@ -283,21 +285,27 @@ export class SetproductComponent implements OnInit, OnDestroy {
     if (confirm(`Are you sure you want to delete data with id: ${id}`)) {
       this.dataLoading = true;
       this.snackBar.open(`Deleting data with id: ${id}`);
+      for (const i of this.products) {
+        if (i.id === id) {
+          this.backendService.logAdminActivity('deleteProduct', i);
+          break;
+        }
+      }
       this.querySubscription = this.backendService.deleteProduct(id)
-        .subscribe((data: any) => {
-          this.members = data;
-          if (this.members.length > 50) {
+        .subscribe((data: Product[]) => {
+          this.products = data;
+          if (this.products.length > 50) {
             this.paginationOption = [5, 10, 25, 50, 100];
-          } else if (this.members.length <= 50 && this.members.length > 25) {
+          } else if (this.products.length <= 50 && this.products.length > 25) {
             this.paginationOption = [5, 10, 25, 50];
-          } else if (this.members.length <= 25 && this.members.length > 10) {
+          } else if (this.products.length <= 25 && this.products.length > 10) {
             this.paginationOption = [5, 10, 25];
-          } else if (this.members.length <= 10 && this.members.length > 5) {
+          } else if (this.products.length <= 10 && this.products.length > 5) {
             this.paginationOption = [5, 10];
           } else {
             this.paginationOption = [5];
           }
-          this.dataSource = new MatTableDataSource(this.members);
+          this.dataSource = new MatTableDataSource(this.products);
           this.dataSource.paginator = this.paginator;
           this.dataSource.sort = this.sort;
           this.snackBar.open(`Data deleted successfully.`, 'OK', {
@@ -313,26 +321,26 @@ export class SetproductComponent implements OnInit, OnDestroy {
         });
     }
   }
-  // !SECTION delet function ends
+  // !SECTION delete function ends
 
   // SECTION table functions start
   getData = () => {
     this.dataLoading = true;
     this.querySubscription = this.backendService.getProducts('products')
-      .subscribe((data: any) => {
-        this.members = data;
-        if (this.members.length > 50) {
+      .subscribe((data: Product[]) => {
+        this.products = data;
+        if (this.products.length > 50) {
           this.paginationOption = [5, 10, 25, 50, 100];
-        } else if (this.members.length <= 50 && this.members.length > 25) {
+        } else if (this.products.length <= 50 && this.products.length > 25) {
           this.paginationOption = [5, 10, 25, 50];
-        } else if (this.members.length <= 25 && this.members.length > 10) {
+        } else if (this.products.length <= 25 && this.products.length > 10) {
           this.paginationOption = [5, 10, 25];
-        } else if (this.members.length <= 10 && this.members.length > 5) {
+        } else if (this.products.length <= 10 && this.products.length > 5) {
           this.paginationOption = [5, 10];
         } else {
           this.paginationOption = [5];
         }
-        this.dataSource = new MatTableDataSource(this.members);
+        this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       }, (error: any) => {

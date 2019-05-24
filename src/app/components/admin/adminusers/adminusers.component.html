@@ -2,7 +2,7 @@
   <mat-card>
     <div *ngIf="(toggleField === 'searchMode') else ((toggleField === 'editMode') ? showEditMode : showResultMode)">
       <mat-card-header>
-        <span matTooltip="Shoe recent results">
+        <span matTooltip="Show all users's orders">
           <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
             <mat-icon>supervised_user_circle</mat-icon>
           </button>
@@ -43,11 +43,67 @@
   </mat-card>
 
   <ng-template #showEditMode>
+      <mat-card-header>
+          <span matTooltip="Search user's orders">
+            <button mat-fab color="primary" (click)="toggle('searchMode');">
+              <mat-icon>search</mat-icon>
+            </button>
+          </span>
+          <span class="fill-margin"></span>
+          <span matTooltip="Shoe all users's orders">
+            <button mat-fab color="primary" (click)="toggle('resultMode');getData();">
+              <mat-icon>supervised_user_circle</mat-icon>
+            </button>
+          </span>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="title">
+            <h3>Update existing Order:</h3>
+          </div>
+          <form [ngClass]="{'form-disable': formWait}"
+            (ngSubmit)="onUpdateSubmit(updateForm.value);toggle('resultMode');this.updateForm.reset()" #updateForm="ngForm">
+            <input type="hidden" name="orderID" [(ngModel)]="updateOrderData.orderID" #orderID="ngModel">
+            <input type="hidden" name="userID" [(ngModel)]="updateOrderData.userID" #userID="ngModel">
+            <input type="hidden" name="phone" [(ngModel)]="updateOrderData.phone" #phone="ngModel">
+            <input type="hidden" name="productID" [(ngModel)]="updateOrderData.productID" #productID="ngModel">
+            <input type="hidden" name="expectedDelivery" [(ngModel)]="updateOrderData.expectedDelivery" #expectedDelivery="ngModel">
+            <input type="hidden" name="execContact" [(ngModel)]="updateOrderData.execContact" #execContact="ngModel">
+            <mat-form-field hintLabel="Product name  (READONLY)">
+              <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateOrderData.product"
+                #product="ngModel" placeholder="Product name" name="product" readonly required>
+              <mat-hint align="end">{{updateOrderData.product?.length || 0}}/50 (READONLY)</mat-hint>
+            </mat-form-field>
+            <br><br>
+            <mat-form-field hintLabel="Product count| Max 5 count">
+              <input matInput type="number" min="0" max="5" [(ngModel)]="updateOrderData.productCount"
+                #productCount="ngModel" placeholder="Enter the product count (Like: '2')" name="productCount" required>
+              <mat-hint align="end">{{updateOrderData.productCount || 0}}/5</mat-hint>
+            </mat-form-field>
+            <div [hidden]="productCount.valid || productCount.pristine" class="alert alert-danger">
+              Product count is required
+            </div>
+            <br><br>
+            <mat-form-field hintLabel="Product cost (READONLY)">
+              <input matInput type="number" [(ngModel)]="updateOrderData.cost"
+                #cost="ngModel" placeholder="Product cost" name="cost" readonly required>
+                <mat-hint align="end">{{updateOrderData.cost || 0}} (READONLY)</mat-hint>
+            </mat-form-field>
+            <br><br>
+            <div class="form-actions">
+              <div>
+                <button type="submit" mat-raised-button color="primary" [disabled]="!updateForm.form.valid">Submit</button>
+              </div>
+              <div>
+                <button type="reset" mat-raised-button color="accent">Reset</button>
+              </div>
+            </div>
+          </form>
+        </mat-card-content>
   </ng-template>
 
   <ng-template #showResultMode>
     <mat-card-header>
-      <span matTooltip="Search product">
+      <span matTooltip="Search user's orders">
         <button mat-fab color="primary" (click)="toggle('searchMode');">
           <mat-icon>search</mat-icon>
         </button>
