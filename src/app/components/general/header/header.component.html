@@ -19,7 +19,7 @@
 
     <mat-form-field *ngIf="!adminView" appearance="standard" class="responsive">
       <mat-label>Search product here</mat-label>
-      <input type="text" matInput placeholder="Ex: HRX T-Shirt" (keyup.enter)="routeToProduct($event);">
+      <input type="search" matInput placeholder="Ex: HRX T-Shirt" (keyup.enter)="routeToProduct($event);">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
 

@@ -1,3 +1,53 @@
-<header pageTitle="Login" iconTitle="account_box" activeToggle="login" helpText="This is Login Page quick help section"></header>
+<div class="main-content">
+  <header pageTitle="Login" iconTitle="account_box" activeToggle="login"
+    helpText="This is Login Page quick help section"></header>
+  <main>
+    <div class="content" [@fallIn]='state' [hidden]="user">
+      <div class="phoneAuthArea">
 
-This Works smooth
+        <div id="recaptcha-container" align="center"></div>
+
+        <mat-horizontal-stepper linear='true' class="stepper" #stepper>
+          <mat-step label="Step 1" state="phone">
+            <form>
+              <ng-template matStepLabel>Fill out your 10 digit phone number</ng-template>
+              <mat-form-field>
+                <span matPrefix>+91 &nbsp;</span>
+                <input matInput type="tel" required name="phoneNumber" [(ngModel)]="phoneNumber.phoneNumber"
+                  placeholder="Phone Number | Max 10 digits" [readonly]="submitNumber">
+                <mat-hint align="end">{{phoneNumber.phoneNumber?.length || 0}}/10</mat-hint>
+              </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperNext type="button" color="primary" (click)="this.sendLoginCode();" [disabled]="submitNumber">Send SMS Code</button>
+              </div>
+            </form>
+          </mat-step>
+          <mat-step label="Step 2" state="otp">
+            <form>
+              <ng-template matStepLabel>Fill out the otp received</ng-template>
+              <mat-form-field>
+                <input matInput placeholder="OTP received" type="text" required name="code"
+                  [(ngModel)]="verificationCode">
+                <mat-hint align="end">{{verificationCode || 0}}</mat-hint>
+              </mat-form-field>
+              <div>
+                <button mat-raised-button matStepperNext *ngIf="enablePhone" [disabled]="!verificationCode && !windowRef.confirmationResult" type="button" color="accent"
+                  (click)="verifyLoginCode()">Verify</button>
+              </div>
+            </form>
+          </mat-step>
+          <ng-template matStepperIcon="phone">
+            <mat-icon>perm_phone_msg</mat-icon>
+          </ng-template>
+          <ng-template matStepperIcon="otp">
+            <mat-icon>message</mat-icon>
+          </ng-template>
+
+        </mat-horizontal-stepper>
+      </div>
+
+    </div>
+  </main>
+
+  <footer></footer>
+</div>

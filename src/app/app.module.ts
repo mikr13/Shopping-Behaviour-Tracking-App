@@ -3,9 +3,14 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AngularMaterialModule } from './modules/angular-material/angular-material.module';
 import { AppRoutingModule } from './modules/app-routing/app-routing.module';
+import { environment } from '../environments/environment';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './components/general/login/login.component';
@@ -56,7 +61,11 @@ import { SearchComponent } from './components/general/search/search.component';
     ReactiveFormsModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    AngularMaterialModule
+    AngularMaterialModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule
   ],
   providers: [],
   bootstrap: [AppComponent]
