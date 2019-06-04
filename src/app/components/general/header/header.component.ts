@@ -87,10 +87,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   openDialog(): void {
     if (this.search === undefined) { this.search = ''; }
     const dialogRef = this.dialog.open(DialogComponent, {
+      data: 'header'
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      this.search = result;
+      this.search = result || '';
       this.navigate(this.search);
     });
   }

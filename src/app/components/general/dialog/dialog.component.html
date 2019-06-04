@@ -1,11 +1,62 @@
-<h2 mat-dialog-title>Search here</h2>
-<div mat-dialog-content>
-  <mat-form-field appearance="standard" class="responsive">
-    <mat-label>Search product here</mat-label>
-    <input matInput placeholder="Ex: HRX T-Shirt" #search>
-    <mat-icon matSuffix>search</mat-icon>
-  </mat-form-field>
+<div *ngIf="data === 'header'">
+  <h2 mat-dialog-title>Search here</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard" class="responsive">
+      <mat-label>Search product here</mat-label>
+      <input type="text" matInput placeholder="Ex: HRX T-Shirt" #search>
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="search.value">Go!</button>
+  </div>
 </div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="search.value">Go!</button>
+
+<div *ngIf="data === 'phone'">
+  <h2 mat-dialog-title>Phone number here</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard" class="responsive">
+      <mat-label>Enter your phone number here</mat-label>
+      <span matPrefix>+91 &nbsp;</span>
+      <input type="tel" matInput placeholder="oAuth didn't provide with phone number" pattern="[789][0-9]{9}" #phone>
+      <mat-icon matSuffix>phone</mat-icon>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="phone.value">Go!</button>
+  </div>
+</div>
+
+<div *ngIf="data === 'email'">
+  <h2 mat-dialog-title>Email here</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard" class="responsive">
+      <mat-label>Enter your email here</mat-label>
+      <input type="email" matInput placeholder="oAuth didn't provide with email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email>
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="email.value">Go!</button>
+  </div>
+</div>
+
+<div *ngIf="data === 'both'">
+  <h2 mat-dialog-title>Email and Phone here</h2>
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard" class="responsive">
+      <mat-label>Enter your phone here</mat-label>
+      <span matPrefix>+91 &nbsp;</span>
+      <input matInput placeholder="oAuth didn't provide with phone" pattern="[789][0-9]{9}" #phone>
+      <mat-icon matSuffix>phone</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="standard" class="responsive">
+      <mat-label>Enter your email here</mat-label>
+      <input matInput placeholder="oAuth didn't provide with email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$" #email>
+      <mat-icon matSuffix>email</mat-icon>
+    </mat-form-field>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="[phone.value, email.value]">Go!</button>
+  </div>
 </div>

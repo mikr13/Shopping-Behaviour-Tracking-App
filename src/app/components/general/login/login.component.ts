@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit {
   user: any;
   enablePhone: boolean;
   submitNumber: boolean;
+  snackBarRef: any;
 
   constructor(private win: WindowService, private snackBar: MatSnackBar, private router: Router, private authService: AuthService) { }
 
@@ -38,9 +39,12 @@ export class LoginComponent implements OnInit {
       size: 'large',
       callback: (response: any) => {
         this.enablePhone = true;
-      },
-      'expired-callback': () => {
-        alert('Please fill the recaptcha');
+        this.snackBarRef = this.snackBar.open(`ReCaptcha Success = ${this.enablePhone}, proceed to login with any method`, 'CLOSE', {
+          duration: 3500
+        });
+        this.snackBarRef.onAction().subscribe(() => {
+          this.snackBarRef.dismiss();
+        });
       }
     });
     this.windowRef.recaptchaVerifier.render();
@@ -75,6 +79,22 @@ export class LoginComponent implements OnInit {
           duration: 3500
         });
       });
+  }
+
+  oAuthLogin = (type: string) => {
+    switch (type) {
+      case 'google':
+        this.authService.googleLogin();
+        break;
+      case 'facebook':
+        this.authService.facebookLogin();
+        break;
+      case 'twitter':
+        this.authService.twitterLogin();
+        break;
+      default:
+        break;
+    }
   }
 
 }

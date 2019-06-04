@@ -23,9 +23,21 @@ mat-spinner {
   padding: 2rem;
 }
 
-.stepper {
-  width: 50%;
-  margin: 0 auto;
+.phoneAuthArea {
+  margin: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.login-card {
+  flex: 0 1 calc(45% - 1em);
+  margin: 10px 0;
+}
+
+mat-chip {
+  margin: 4px auto !important;
+  width: 200px !important;
 }
 
 footer {
@@ -40,5 +52,16 @@ footer {
 
   .content {
     display: block;
+  }
+
+
+.phoneAuthArea {
+  margin: 10px;
+  display: block;
+}
+
+  .login-card {
+    display: block;
+    margin: 10px 0;
   }
 }

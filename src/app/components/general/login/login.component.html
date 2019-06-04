@@ -3,49 +3,77 @@
     helpText="This is Login Page quick help section"></header>
   <main>
     <div class="content" [@fallIn]='state' [hidden]="user">
+      <div id="recaptcha-container" align="center"></div>
       <div class="phoneAuthArea">
 
-        <div id="recaptcha-container" align="center"></div>
+        <mat-card class="login-card">
+          <mat-card-title>
+            Login with Google/Facebook/Twitter
+          </mat-card-title>
+          <mat-card-content>
+            <mat-chip-list class="mat-chip-list-stacked" selectable="true">
+              <mat-chip selected color="warn" [disabled]="!enablePhone" (click)="oAuthLogin('google')">
+                <mat-icon svgIcon="google"></mat-icon> &nbsp;&nbsp;
+                Login with Google
+              </mat-chip>
+              <mat-chip selected color="primary" [disabled]="!enablePhone" (click)="oAuthLogin('facebook')">
+                <mat-icon svgIcon="fb"></mat-icon> &nbsp;&nbsp;
+                Login with Facebook
+              </mat-chip>
+              <mat-chip selected color="primary" [disabled]="!enablePhone" (click)="oAuthLogin('twitter')">
+                <mat-icon svgIcon="twitter"></mat-icon> &nbsp;&nbsp;
+                Login with Twitter
+              </mat-chip>
+            </mat-chip-list>
+          </mat-card-content>
+        </mat-card>
 
-        <mat-horizontal-stepper linear='true' class="stepper" #stepper>
-          <mat-step label="Step 1" state="phone">
-            <form>
-              <ng-template matStepLabel>Fill out your 10 digit phone number</ng-template>
-              <mat-form-field>
-                <span matPrefix>+91 &nbsp;</span>
-                <input matInput type="tel" required name="phoneNumber" [(ngModel)]="phoneNumber.phoneNumber"
-                  placeholder="Phone Number | Max 10 digits" [readonly]="submitNumber">
-                <mat-hint align="end">{{phoneNumber.phoneNumber?.length || 0}}/10</mat-hint>
-              </mat-form-field>
-              <div>
-                <button mat-raised-button matStepperNext type="button" color="primary" (click)="this.sendLoginCode();" [disabled]="submitNumber">Send SMS Code</button>
-              </div>
-            </form>
-          </mat-step>
-          <mat-step label="Step 2" state="otp">
-            <form>
-              <ng-template matStepLabel>Fill out the otp received</ng-template>
-              <mat-form-field>
-                <input matInput placeholder="OTP received" type="text" required name="code"
-                  [(ngModel)]="verificationCode">
-                <mat-hint align="end">{{verificationCode || 0}}</mat-hint>
-              </mat-form-field>
-              <div>
-                <button mat-raised-button matStepperNext *ngIf="enablePhone" [disabled]="!verificationCode && !windowRef.confirmationResult" type="button" color="accent"
-                  (click)="verifyLoginCode()">Verify</button>
-              </div>
-            </form>
-          </mat-step>
-          <ng-template matStepperIcon="phone">
-            <mat-icon>perm_phone_msg</mat-icon>
-          </ng-template>
-          <ng-template matStepperIcon="otp">
-            <mat-icon>message</mat-icon>
-          </ng-template>
+        <mat-card class="login-card">
+          <mat-card-title>Login with Mobile</mat-card-title>
+          <mat-card-content>
+            <mat-horizontal-stepper linear='true' class="stepper" #stepper>
+              <mat-step label="Step 1" state="phone">
+                <form [ngStyle]="{'opacity' : enablePhone ? '1': '0.5', 'pointerEvent': enablePhone ? 'all': 'none'}">
+                  <ng-template matStepLabel>Fill out your 10 digit phone number</ng-template>
+                  <mat-form-field>
+                    <span matPrefix>+91 &nbsp;</span>
+                    <input matInput type="tel" required name="phoneNumber" [(ngModel)]="phoneNumber.phoneNumber"
+                      placeholder="Phone Number | Max 10 digits" [readonly]="submitNumber">
+                    <mat-hint align="end">{{phoneNumber.phoneNumber?.length || 0}}/10</mat-hint>
+                  </mat-form-field>
+                  <div>
+                    <button mat-raised-button matStepperNext type="button" color="primary"
+                      (click)="this.sendLoginCode();" [disabled]="submitNumber">Send SMS Code</button>
+                  </div>
+                </form>
+              </mat-step>
+              <mat-step label="Step 2" state="otp">
+                <form [ngStyle]="{'opacity' : enablePhone ? '1': '0.5', 'pointerEvent': enablePhone ? 'all': 'none'}">
+                  <ng-template matStepLabel>Fill out the otp received</ng-template>
+                  <mat-form-field>
+                    <input matInput placeholder="OTP received" type="text" required name="code"
+                      [(ngModel)]="verificationCode">
+                    <mat-hint align="end">{{verificationCode || 0}}</mat-hint>
+                  </mat-form-field>
+                  <div>
+                    <button mat-raised-button matStepperNext *ngIf="enablePhone"
+                      [disabled]="!verificationCode && !windowRef.confirmationResult" type="button" color="accent"
+                      (click)="verifyLoginCode()">Verify</button>
+                  </div>
+                </form>
+              </mat-step>
+              <ng-template matStepperIcon="phone">
+                <mat-icon>perm_phone_msg</mat-icon>
+              </ng-template>
+              <ng-template matStepperIcon="otp">
+                <mat-icon>message</mat-icon>
+              </ng-template>
 
-        </mat-horizontal-stepper>
+            </mat-horizontal-stepper>
+          </mat-card-content>
+        </mat-card>
+
       </div>
-
     </div>
   </main>
 

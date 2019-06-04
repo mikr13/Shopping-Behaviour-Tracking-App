@@ -163,5 +163,17 @@ export class AngularMaterialModule {
       this.iconRegistry.addSvgIcon(
         'email', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/email.svg')
       );
+
+      this.iconRegistry.addSvgIcon(
+        'fb', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/fb.svg')
+      );
+
+      this.iconRegistry.addSvgIcon(
+        'google', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/google.svg')
+      );
+      
+      this.iconRegistry.addSvgIcon(
+        'twitter', this.sanitizer.bypassSecurityTrustResourceUrl('assets/icons/twitter.svg')
+      );
     }
 }
