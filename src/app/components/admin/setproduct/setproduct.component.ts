@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 
 import { Product } from './../../../shared/Product';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-setproduct',
@@ -55,7 +56,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
   errMsg: any;
   viewRole: string;
 
-  constructor(private snackBar: MatSnackBar, private backendService: BackendService, private router: Router) {
+  constructor(private snackBar: MatSnackBar, private backendService: BackendService, private authService: AuthService, private router: Router) {
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
       startWith(null),
       map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
@@ -63,7 +64,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
     });
 
@@ -207,6 +208,7 @@ export class SetproductComponent implements OnInit, OnDestroy {
         this.snackBar.open(`Data saved successfully, Data id: ${this.products[this.products.length - 1].id}`, 'OK', {
           duration: this.snakbarInterval
         });
+        this.backendService.logAdminActivity('addProduct', this.products[this.products.length - 1]);
       }, (error: any) => {
         this.error = true;
         this.errMsg = error.message;

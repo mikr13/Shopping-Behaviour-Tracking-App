@@ -23,6 +23,7 @@ export class BackendService {
     searchProduct: [],
     editProduct: [],
     deleteProduct: [],
+    addProduct: [],
     searchUserOrder: [],
     editUserOrder: [],
     deleteUserOrder: [],
@@ -38,86 +39,6 @@ export class BackendService {
 
   getConfig = () => {
     return environment.social;
-  }
-
-  getUserStatus = () => {
-    const role = ['user', 'admin'];
-    const status = ['false', 'true'];
-    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole')) {
-      localStorage.setItem('userLoginStatus', status[0]);
-      localStorage.setItem('userRole', role[0]);
-      return Observable.create(observer => {
-        setTimeout(() => {
-          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-        }, 2000);
-      });
-    } else if (!status.includes(localStorage.getItem('userLoginStatus')) || !role.includes(localStorage.getItem('userRole'))) {
-      return Observable.create(observer => {
-        this.removeUserAuth(0, () => {
-          localStorage.setItem('userLoginStatus', status[0]);
-          localStorage.setItem('userRole', role[0]);
-          setTimeout(() => {
-            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-          }, 2000);
-        });
-      });
-    } else {
-      if (localStorage.getItem('userRole') === role[1]) {
-        if (localStorage.getItem('userLoginStatus') === status[0] || !localStorage.getItem('userLoginStatus')) {
-          return Observable.create(observer => {
-            this.removeUserAuth(0, () => {
-              localStorage.setItem('userLoginStatus', status[0]);
-              localStorage.setItem('userRole', role[0]);
-              setTimeout(() => {
-                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-              }, 2000);
-            });
-          });
-        } else if (localStorage.getItem('userLoginStatus') === status[1]) {
-          return Observable.create(observer => {
-            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-          });
-        } else {
-          return Observable.create(observer => {
-            this.removeUserAuth(0, () => {
-              localStorage.setItem('userLoginStatus', status[0]);
-              localStorage.setItem('userRole', role[0]);
-              setTimeout(() => {
-                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-              }, 2000);
-            });
-          });
-        }
-      } else if (localStorage.getItem('userRole') === 'user') {
-        if (localStorage.getItem('userLoginStatus') === status[1]) {
-          return Observable.create(observer => {
-            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-          });
-        } else if (localStorage.getItem('userLoginStatus') === status[0]) {
-          return Observable.create(observer => {
-            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-          });
-        } else {
-          return Observable.create(observer => {
-            this.removeUserAuth(0, () => {
-              localStorage.setItem('userLoginStatus', status[0]);
-              localStorage.setItem('userRole', role[0]);
-              setTimeout(() => {
-                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
-              }, 2000);
-            });
-          });
-        }
-      }
-    }
-  }
-
-  private removeUserAuth = (duration: number, callback) => {
-    setTimeout(() => {
-      localStorage.removeItem('userLoginStatus');
-      localStorage.removeItem('userRole');
-      callback();
-    }, duration);
   }
 
   getProducts = (type: string, data?: any) => {
@@ -438,5 +359,13 @@ export class BackendService {
       this.adminActivity[type].push(data);
       console.log(this.adminActivity);
     }
+  }
+
+  getadminActivityData = () => {
+    return Observable.create(observer => {
+      setTimeout(() => {
+        observer.next(this.adminActivity);
+      }, 2000);
+    });
   }
 }

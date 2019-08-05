@@ -22,6 +22,7 @@ interface User {
 export class AuthService {
   user: Observable<User>;
   socialUser: string;
+  status: boolean;
 
   constructor(public afAuth: AngularFireAuth, private router: Router, private snackBar: MatSnackBar, private afs: AngularFirestore, private dialog: MatDialog) {
     this.user = this.afAuth.authState.pipe(switchMap(user => {
@@ -33,6 +34,87 @@ export class AuthService {
     }));
   }
 
+  getUserStatus = () => {
+    const role = ['user', 'admin'];
+    const status = 'false';
+    if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole')) {
+      localStorage.setItem('userLoginStatus', status);
+      localStorage.setItem('userRole', role[0]);
+      return Observable.create(observer => {
+        setTimeout(() => {
+          observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+        }, 2000);
+      });
+    } else if (!status.includes(localStorage.getItem('userLoginStatus')) || !role.includes(localStorage.getItem('userRole'))) {
+      return Observable.create(observer => {
+        this.removeUserAuth(() => {
+          localStorage.setItem('userLoginStatus', status);
+          localStorage.setItem('userRole', role[0]);
+          setTimeout(() => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          }, 2000);
+        });
+      });
+    } else {
+      if (localStorage.getItem('userRole') === role[1]) {
+        if (localStorage.getItem('userLoginStatus') === status || !localStorage.getItem('userLoginStatus')) {
+          return Observable.create(observer => {
+            this.removeUserAuth(() => {
+              localStorage.setItem('userLoginStatus', status);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+              }, 2000);
+            });
+          });
+        } else if (localStorage.getItem('userLoginStatus') === status[1]) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else {
+          return Observable.create(observer => {
+            this.removeUserAuth(() => {
+              localStorage.setItem('userLoginStatus', status);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+              }, 2000);
+            });
+          });
+        }
+      } else if (localStorage.getItem('userRole') === 'user') {
+        if (localStorage.getItem('userLoginStatus') === status[1]) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else if (localStorage.getItem('userLoginStatus') === status) {
+          return Observable.create(observer => {
+            observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+          });
+        } else {
+          return Observable.create(observer => {
+            this.removeUserAuth(() => {
+              localStorage.setItem('userLoginStatus', status);
+              localStorage.setItem('userRole', role[0]);
+              setTimeout(() => {
+                observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
+              }, 2000);
+            });
+          });
+        }
+      }
+    }
+  }
+
+  isUserLoggedIn = () => {
+    return this.afAuth.authState;
+  }
+
+  private removeUserAuth = (callback: () => void) => {
+    this.signOut();
+    callback();
+  }
+
   googleLogin = async () => {
     const provider = new auth.GoogleAuthProvider();
     try {
@@ -40,6 +122,7 @@ export class AuthService {
       this.snackBar.open('Successfully Signed In with Google.', 'CLOSE', {
         duration: 3500
       });
+      this.status = true;
       this.updateUserData(credential.user).subscribe(data => {
         console.log(data);
       });
@@ -55,7 +138,10 @@ export class AuthService {
       this.snackBar.open('Successfully Signed In with Facebook.', 'CLOSE', {
         duration: 3500
       });
-      this.updateUserData(credential.user);
+      this.status = true;
+      this.updateUserData(credential.user).subscribe(data => {
+        console.log(data);
+      })
     } catch (error) {
       return this.handleError(error);
     }
@@ -68,7 +154,10 @@ export class AuthService {
       this.snackBar.open('Successfully Signed In with Twitter.', 'CLOSE', {
         duration: 3500
       });
-      this.updateUserData(credential.user);
+      this.status = true;
+      this.updateUserData(credential.user).subscribe(data => {
+        console.log(data);
+      })
     } catch (error) {
       return this.handleError(error);
     }
@@ -86,33 +175,39 @@ export class AuthService {
     };
 
     if (data.phone === '' && data.email !== '') {
-      this.openDialog('phone').subscribe(result => {
-        data.phone = result;
-        return Observable.create(observer => {
-          observer.next(userRef.set(data, {merge: true}));
+      return Observable.create(observer => {
+        this.openDialog('phone').subscribe(result => {
+          data.phone = result;
+          userRef.set(data, { merge: true });
+          observer.next(data);
+          observer.complete();
         });
       });
     } else if (data.email === '' && data.phone !== '') {
-      this.openDialog('email').subscribe(result => {
-        data.email = result;
-        return Observable.create(observer => {
-          observer.next(userRef.set(data, {merge: true}));
+      return Observable.create(observer => {
+        this.openDialog('email').subscribe(result => {
+          data.email = result;
+          userRef.set(data, { merge: true });
+          observer.next(data);
+          observer.complete();
         });
       });
     } else if (data.email === '' && data.phone === '') {
-      this.openDialog('both').subscribe(result => {
-        data.phone = result[0];
-        data.email = result[1];
-        return Observable.create(observer => {
-          observer.next(userRef.set(data, {merge: true}));
+      return Observable.create(observer => {
+        this.openDialog('both').subscribe(result => {
+          data.phone = result[0];
+          data.email = result[1];
+          userRef.set(data, { merge: true });
+          observer.next(data);
+          observer.complete();
         });
       });
     } else {
       return Observable.create(observer => {
-        observer.next(userRef.set(data, {merge: true}));
+        observer.next(userRef.set(data, { merge: true }));
+        observer.complete();
       });
     }
-
   }
 
   private openDialog = (type?: string) => {
@@ -154,6 +249,7 @@ export class AuthService {
 
   signOut = async () => {
     await this.afAuth.auth.signOut();
+    this.status = false;
     localStorage.clear();
     this.router.navigate(['/']);
     this.snackBar.open('You have been Logged Out.', 'CLOSE', {
@@ -174,6 +270,7 @@ export class AuthService {
       });
     } else {
       this.snackBar.open(error.message, 'CLOSE', { duration: 3500 });
+      console.log(error);
     }
     return error.message;
   }

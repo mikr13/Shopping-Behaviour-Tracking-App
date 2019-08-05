@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { moveIn, fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-home',
@@ -26,12 +27,12 @@ export class HomeComponent implements OnInit, OnDestroy {
   showScrollHeight = 300;
   hideScrollHeight = 10;
 
-  constructor(private backendService: BackendService, private router: Router) { }
+  constructor(private backendService: BackendService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.statusLoading = true;
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
     });
 

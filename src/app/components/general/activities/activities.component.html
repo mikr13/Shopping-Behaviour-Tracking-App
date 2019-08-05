@@ -78,7 +78,81 @@
   </mat-expansion-panel>
 </mat-accordion>
 
-
+<!--SECTION Admin area start -->
 <mat-accordion *ngIf="!statusLoading && viewRole === 'admin'">
-  Hey
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Product Searches
+      </mat-panel-title>
+      <mat-panel-description>
+        List of products you searched
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.searchProduct.length">
+      <mat-list-item *ngFor="let item of interestData.searchProduct">
+        <mat-icon matListIcon>search</mat-icon>
+        <h3 matLine> {{ item.product }} </h3>
+        <p matLine>Category: {{ item.category }}</p>
+        <p matLine>You searched this at {{ item.time | date}} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Product Edits
+      </mat-panel-title>
+      <mat-panel-description>
+        List of products you edited
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.editProduct.length">
+      <mat-list-item *ngFor="let item of interestData.editProduct">
+        <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+        <h3 matLine> ID: {{ item.id }} </h3>
+        <p matLine>Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}, Max Discount: {{ item.maxdiscount }} %, Extra Taxes: {{ item.extrataxes }} %</p>
+        <p matLine>You edited this at {{ item.time | date }} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Product deletes
+      </mat-panel-title>
+      <mat-panel-description>
+        List of products you deleted
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.deleteProduct.length">
+      <mat-list-item *ngFor="let item of interestData.deleteProduct">
+        <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+        <h3 matLine> ID: {{ item.id }} Name: {{ item.product }} </h3>
+        <p matLine>Category: {{ item.category }}, Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}</p>
+        <p matLine>You deleted this at {{ item.time | date }} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Your Product adds
+      </mat-panel-title>
+      <mat-panel-description>
+        List of new products you added
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <mat-list *ngIf="interestData.addProduct.length">
+      <mat-list-item *ngFor="let item of interestData.addProduct">
+        <img matListAvatar src="{{ item.images[0] }}" alt="{{ item.product }}">
+        <h3 matLine> ID: {{ item.id }} Name: {{ item.product }} </h3>
+        <p matLine>Category: {{ item.category }}, Tags: [{{ item.tags }}], Price: &#8377; {{ item.price }}</p>
+        <p matLine>You added this at {{ item.time | date }} </p>
+      </mat-list-item>
+    </mat-list>
+  </mat-expansion-panel>
 </mat-accordion>

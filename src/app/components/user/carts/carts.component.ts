@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-carts',
@@ -22,12 +23,12 @@ export class CartsComponent implements OnInit, OnDestroy {
   cartData: any;
   cartUpdate: EventEmitter<any> = new EventEmitter();
 
-  constructor(private backendService: BackendService, private router: Router, private snackBar: MatSnackBar) { }
+  constructor(private backendService: BackendService, private authService: AuthService, private router: Router, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.statusLoading = true;
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
     });
 

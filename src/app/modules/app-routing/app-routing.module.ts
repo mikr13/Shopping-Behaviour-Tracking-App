@@ -18,7 +18,7 @@ const routes: Routes = [
   {path: 'aboutus', component: AboutusComponent},
   {path: 'settings', component: SettingComponent, canActivate: [AuthGuard]},
   {path: 'login', component: LoginComponent},
-  {path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard]},
+  {path: 'dashboard', component: DashboardComponent},
   {path: 'setproduct', component: SetproductComponent, canActivate: [AuthGuard]},
   {path: 'search/:query', component: SearchComponent},
   {path: 'product/:id', component: ProductsComponent},

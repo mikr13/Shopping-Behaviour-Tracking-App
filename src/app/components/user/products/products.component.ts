@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { moveIn, fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-products',
@@ -26,7 +27,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   cartUpdate: EventEmitter<any> = new EventEmitter();
   oldValue: number;
 
-  constructor(route: ActivatedRoute, private backendService: BackendService, private snackBar: MatSnackBar, private router: Router) {
+  constructor(route: ActivatedRoute, private backendService: BackendService, private authService: AuthService, private snackBar: MatSnackBar, private router: Router) {
     this.query = route.snapshot.params.id;
     this.query = this.query.split(':')[1];
   }
@@ -34,9 +35,12 @@ export class ProductsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.statusLoading = true;
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
+      console.log(res);
       this.viewRole = res[1];
     });
+
+    console.log(this.viewRole);
 
     if (this.viewRole !== 'user') {
       this.router.navigate(['']);

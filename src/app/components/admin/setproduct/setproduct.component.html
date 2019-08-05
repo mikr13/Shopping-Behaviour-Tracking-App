@@ -205,7 +205,7 @@
         <input type="hidden" name="id" [(ngModel)]="updateProductData.id" #id="ngModel">
         <mat-form-field hintLabel="Category name | Max 50 characters">
           <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.category"
-            #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required>
+            #category="ngModel" placeholder="Enter the category name (Like: 'Clothing')" name="category" required readonly>
           <mat-hint align="end">{{updateProductData.category?.length || 0}}/50</mat-hint>
         </mat-form-field>
         <div [hidden]="category.valid || category.pristine" class="alert alert-danger">
@@ -214,7 +214,7 @@
         <br><br>
         <mat-form-field hintLabel="Sub Category name | Max 50 characters">
           <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.subcategory"
-            #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory" required>
+            #subcategory="ngModel" placeholder="Enter the category name (Like: 'T-Shirts')" name="subcategory" required readonly>
           <mat-hint align="end">{{updateProductData.subcategory?.length || 0}}/50</mat-hint>
         </mat-form-field>
         <div [hidden]="subcategory.valid || subcategory.pristine" class="alert alert-danger">
@@ -223,7 +223,7 @@
         <br><br>
         <mat-form-field hintLabel="Product name | Max 50 characters">
           <input matInput type="text" minlength="3" maxlength="50" [(ngModel)]="updateProductData.product"
-            #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product" required>
+            #product="ngModel" placeholder="Enter the product name (Like: 'HRX blue t-shirt')" name="product" required readonly>
           <mat-hint align="end">{{updateProductData.product?.length || 0}}/50</mat-hint>
         </mat-form-field>
         <div [hidden]="product.valid || product.pristine" class="alert alert-danger">

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { BackendService } from 'src/app/services/backend.service';
 import { DialogComponent } from '../dialog/dialog.component';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
 // tslint:disable-next-line: component-selector
@@ -29,11 +30,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Input() private cartUpdate: EventEmitter<any>;
   size: string;
 
-  constructor(private backendService: BackendService, private dialog: MatDialog, private router: Router) { }
+  constructor(private backendService: BackendService, private authService: AuthService, private dialog: MatDialog, private router: Router) { }
 
   ngOnInit() {
     this.search = 'Hey';
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.userStatusColor = res[0] === 'true' ? 'primary' : 'accent';
       this.userStatus = res[0] === 'true' ? 'Your account section' : 'Login/Signup';
       this.userRole = res[1];

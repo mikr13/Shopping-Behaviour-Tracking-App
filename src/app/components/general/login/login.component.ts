@@ -2,11 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { Router } from '@angular/router';
 import * as firebase from 'firebase/app';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth } from 'firebase/app';
 
 import { AuthService } from './../../../services/auth.service';
 import { WindowService } from './../../../services/window.service';
 import { PhoneNumber } from 'src/app/shared/Phone';
-import { environment } from 'src/environments/environment';
 import { fallIn } from 'src/app/shared/router.animation';
 
 @Component({
@@ -27,8 +28,22 @@ export class LoginComponent implements OnInit {
   enablePhone: boolean;
   submitNumber: boolean;
   snackBarRef: any;
+  showRecaptchaDiv: boolean;
 
-  constructor(private win: WindowService, private snackBar: MatSnackBar, private router: Router, private authService: AuthService) { }
+  constructor(private win: WindowService, private snackBar: MatSnackBar, private router: Router, private authService: AuthService, public afAuth: AngularFireAuth) {
+    this.afAuth.user.subscribe((doc) => {
+      if (doc !== null) {
+        this.showRecaptchaDiv = false;
+      } else {
+        this.showRecaptchaDiv = true;
+      }
+      // console.log(doc);
+    });
+    // if (this.afAuth.user) {
+    // } else {
+    //   this.showRecaptchaDiv = true;
+    // }
+  }
 
   ngOnInit() {
     this.submitNumber = false;
@@ -36,21 +51,25 @@ export class LoginComponent implements OnInit {
     this.windowRef = this.win.windowRef;
     firebase.auth().useDeviceLanguage();
     this.windowRef.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-      size: 'large',
-      callback: (response: any) => {
-        this.enablePhone = true;
-        this.snackBarRef = this.snackBar.open(`ReCaptcha Success = ${this.enablePhone}, proceed to login with any method`, 'CLOSE', {
-          duration: 3500
-        });
-        this.snackBarRef.onAction().subscribe(() => {
-          this.snackBarRef.dismiss();
-        });
-      }
+      size: 'large'
     });
     this.windowRef.recaptchaVerifier.render();
+    this.windowRef.recaptchaVerifier.verify().then(token => {
+      console.log(token);
+      this.enablePhone = true;
+      this.snackBar.open(`ReCaptcha Success = ${this.enablePhone}, proceed to login with any method`, 'CLOSE', {
+        duration: 3500
+      });
+    }).catch(error => {
+      this.enablePhone = false;
+      this.snackBar.open(`ReCaptcha Failure = ${error}, please try again`, 'CLOSE', {
+        duration: 3500
+      });
+    });
   }
 
   sendLoginCode = () => {
+    this.showRecaptchaDiv = false;
     this.submitNumber = true;
     const appVerifier = this.windowRef.recaptchaVerifier;
     const num = this.phoneNumber.e164;
@@ -58,9 +77,12 @@ export class LoginComponent implements OnInit {
       .then(result => {
         this.windowRef.confirmationResult = result;
       })
-      .catch(error => this.snackBar.open(error, 'CLOSE', {
-        duration: 3500
-      }));
+      .catch(error => {
+        this.showRecaptchaDiv = true;
+        this.snackBar.open(error, 'CLOSE', {
+          duration: 3500
+        });
+      });
   }
 
   verifyLoginCode = () => {
@@ -69,12 +91,15 @@ export class LoginComponent implements OnInit {
       .then(result => {
         result.user.phone = this.phoneNumber.e164;
         this.user = result.user;
-        this.authService.updateUserData(result.user);
+        this.authService.updateUserData(result.user).subscribe(data => {
+          console.log(data);
+        });
         this.snackBar.open('Successfully authenticated', 'CLOSE', {
           duration: 3500
         });
       })
       .catch(error => {
+        this.showRecaptchaDiv = true;
         this.snackBar.open(`Incorrect Code entered!${error}`, 'CLOSE', {
           duration: 3500
         });
@@ -95,6 +120,10 @@ export class LoginComponent implements OnInit {
       default:
         break;
     }
+  }
+
+  logout = () => {
+    this.authService.signOut();
   }
 
 }

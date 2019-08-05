@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { moveIn} from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-search',
@@ -20,7 +21,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   querySubscription: any;
   cards = [];
 
-  constructor(route: ActivatedRoute, private backendService: BackendService, private router: Router) {
+  constructor(route: ActivatedRoute, private backendService: BackendService, private authService: AuthService, private router: Router) {
     this.query = route.snapshot.params.query;
     this.query = this.query.split(':')[1].split('+').join(' ');
     this.backendService.logShoppingInterest('search', {key: this.query});
@@ -29,7 +30,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.statusLoading = true;
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
     });
 

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { Orders } from './../../../shared/Orders';
 import { BackendService } from 'src/app/services/backend.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'shop-adminusers',
@@ -29,11 +30,11 @@ export class AdminusersComponent implements OnInit {
   viewRole: string;
   dataSource: MatTableDataSource<Orders>;
 
-  constructor(private snackBar: MatSnackBar, private backendService: BackendService, private router: Router) { }
+  constructor(private snackBar: MatSnackBar, private backendService: BackendService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
 
-    this.querySubscription = this.backendService.getUserStatus().subscribe((res: Array<any>) => {
+    this.querySubscription = this.authService.getUserStatus().subscribe((res: Array<any>) => {
       this.viewRole = res[1];
     });
 
