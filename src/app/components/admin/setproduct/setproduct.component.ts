@@ -1,7 +1,13 @@
 import { COMMA, ENTER, SPACE } from '@angular/cdk/keycodes';
 import { Component, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatAutocompleteSelectedEvent, MatChipInputEvent, MatAutocomplete, MatSnackBar, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatChipInputEvent } from '@angular/material/chips';
+
 import { CdkTextareaAutosize } from '@angular/cdk/text-field';
 import { Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
@@ -56,9 +62,8 @@ export class SetproductComponent implements OnInit, OnDestroy {
   viewRole: string;
 
   constructor(private snackBar: MatSnackBar, private backendService: BackendService, private router: Router) {
-    this.filteredTags = this.tagCtrl.valueChanges.pipe(
-      startWith(null),
-      map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
+    // tslint:disable-next-line: deprecation
+    this.filteredTags = this.tagCtrl.valueChanges.pipe(startWith(null), map((tag: string | null) => tag ? this._filter(tag) : this.allTags.slice()));
   }
 
   ngOnInit() {

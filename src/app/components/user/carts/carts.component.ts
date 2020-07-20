@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { fallIn } from 'src/app/shared/router.animation';
 import { BackendService } from 'src/app/services/backend.service';

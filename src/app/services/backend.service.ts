@@ -46,13 +46,13 @@ export class BackendService {
     if (!localStorage.getItem('userLoginStatus') || !localStorage.getItem('userRole')) {
       localStorage.setItem('userLoginStatus', status[0]);
       localStorage.setItem('userRole', role[0]);
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
         }, 2000);
       });
     } else if (!status.includes(localStorage.getItem('userLoginStatus')) || !role.includes(localStorage.getItem('userRole'))) {
-      return Observable.create(observer => {
+      return new Observable(observer => {
         this.removeUserAuth(0, () => {
           localStorage.setItem('userLoginStatus', status[0]);
           localStorage.setItem('userRole', role[0]);
@@ -64,7 +64,7 @@ export class BackendService {
     } else {
       if (localStorage.getItem('userRole') === role[1]) {
         if (localStorage.getItem('userLoginStatus') === status[0] || !localStorage.getItem('userLoginStatus')) {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             this.removeUserAuth(0, () => {
               localStorage.setItem('userLoginStatus', status[0]);
               localStorage.setItem('userRole', role[0]);
@@ -74,11 +74,11 @@ export class BackendService {
             });
           });
         } else if (localStorage.getItem('userLoginStatus') === status[1]) {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
           });
         } else {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             this.removeUserAuth(0, () => {
               localStorage.setItem('userLoginStatus', status[0]);
               localStorage.setItem('userRole', role[0]);
@@ -90,15 +90,15 @@ export class BackendService {
         }
       } else if (localStorage.getItem('userRole') === 'user') {
         if (localStorage.getItem('userLoginStatus') === status[1]) {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
           });
         } else if (localStorage.getItem('userLoginStatus') === status[0]) {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             observer.next([localStorage.getItem('userLoginStatus'), localStorage.getItem('userRole')]);
           });
         } else {
-          return Observable.create(observer => {
+          return new Observable(observer => {
             this.removeUserAuth(0, () => {
               localStorage.setItem('userLoginStatus', status[0]);
               localStorage.setItem('userRole', role[0]);
@@ -122,7 +122,7 @@ export class BackendService {
 
   getProducts = (type: string, data?: any) => {
     if (type === 'products') {
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.products);
           observer.complete();
@@ -141,7 +141,7 @@ export class BackendService {
           }
         }
       });
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(result);
           observer.complete();
@@ -154,7 +154,7 @@ export class BackendService {
           return el;
         }
       });
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(result);
           observer.complete();
@@ -167,7 +167,7 @@ export class BackendService {
   saveNewProduct = (data: any) => {
     data.id = this.products.length + 1;
     this.products.push(data);
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(this.products);
         observer.complete();
@@ -178,7 +178,7 @@ export class BackendService {
 
   updateProduct = (data: Product) => {
     if (this.products.includes(data)) {
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.products);
           observer.complete();
@@ -192,7 +192,7 @@ export class BackendService {
           break;
         }
       }
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.products);
           observer.complete();
@@ -204,7 +204,7 @@ export class BackendService {
 
   deleteProduct = (id: Product['id']) => {
     this.products = this.products.filter(el => !(el.id === id));
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(this.products);
         observer.complete();
@@ -231,9 +231,9 @@ export class BackendService {
       const tags: Array<string> = ['disappear', 'smite', 'recite', 'scarp', 'learning', 'comment', 'scorch', 'leave', 'clover'];
       const images: Array<string> = ['https://material.angular.io/assets/img/examples/shiba2.jpg', 'https://cdn.pixabay.com/photo/2016/08/31/13/56/fish-1633525_640.jpg', 'https://cdn.pixabay.com/photo/2017/08/13/06/37/animal-2636367_640.jpg', 'https://cdn.pixabay.com/photo/2014/05/20/21/20/easter-349026_640.jpg'];
 
-      const getUnique = (data: any, count: number) => {
+      const getUnique = (completeData: any, count: number) => {
         // Make a copy of the array
-        const tmp = data.slice(0, data.length);
+        const tmp = completeData.slice(0, completeData.length);
         const ret = [];
 
         for (let i = 0; i < count; i++) {
@@ -291,7 +291,7 @@ export class BackendService {
   }
 
   getuserShoppingInterestData = () => {
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(this.userInterest);
       }, 2000);
@@ -305,7 +305,7 @@ export class BackendService {
       count = count + parseInt(i.count, 10);
     }
 
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(count);
       }, 2000);
@@ -313,7 +313,7 @@ export class BackendService {
   }
 
   getCart = () => {
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(this.cart);
       }, 2000);
@@ -358,7 +358,7 @@ export class BackendService {
 
   getOrders = (type: string, data?: any) => {
     if (type === 'orders') {
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.orders);
           observer.complete();
@@ -371,7 +371,7 @@ export class BackendService {
           return el;
         }
       });
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(result);
           observer.complete();
@@ -384,7 +384,7 @@ export class BackendService {
           return el;
         }
       });
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(result);
           observer.complete();
@@ -396,7 +396,7 @@ export class BackendService {
 
   updateOrder = (data: Orders) => {
     if (this.orders.includes(data)) {
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.orders);
           observer.complete();
@@ -410,7 +410,7 @@ export class BackendService {
           break;
         }
       }
-      return Observable.create(observer => {
+      return new Observable(observer => {
         setTimeout(() => {
           observer.next(this.orders);
           observer.complete();
@@ -422,7 +422,7 @@ export class BackendService {
 
   deleteOrder = (orderID: Orders['orderID']) => {
     this.orders = this.orders.filter(el => !(el.orderID === orderID));
-    return Observable.create(observer => {
+    return new Observable(observer => {
       setTimeout(() => {
         observer.next(this.orders);
         observer.complete();
